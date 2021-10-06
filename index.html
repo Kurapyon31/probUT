@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="ja">
+
+  <head>
+    <meta charset="utf-8">
+    <title>制作展pixijs練習1</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0
+      }
+    </style>
+    <script src="https://pixijs.download/release/pixi.js"></script>
+    <button class="btn">リセット</button>
+  </head>
+
+  <body>
+    <script>
+      sumEx = 0; // 実験の合計回数
+      sumSw = 0; // スイッチを押した回数(max5)
+      sumPh = 0; // 当該事象の起こった回数
+
+      Rball = 0; // 赤玉が出た回数
+      Bball = 0; // 青玉
+      Yball = 0; // 黄玉
+      Wball = 0; // 白玉      
+
+      // pixi.jsのアプリケーションを作成
+      const app = new PIXI.Application({
+        width: 800,
+        height: 600,
+        backgroundColor: 0x556b2f, // 背景色
+      });
+ 
+      // bodyにpixi.jsのview(ステージ)を追加する
+      document.body.appendChild(app.view);
+
+      // 文字(実験して確かめよう!)を表示
+      const message = new PIXI.Text("Let's experiment and confirm!");
+      message.x = 10;
+      message.y = 10;
+      message.style.fill = "white";
+      app.stage.addChild(message);
+      message.interactive = true;
+      message.on("pointertap", () => (message.style.fill = "0xF0E68C"));
+
+      // 文字(Lに4色入った回数:)を表示
+      const mesPh = new PIXI.Text("Lに4色入った回数:");
+      mesPh.x = 520;
+      mesPh.y = 10;
+      mesPh.style.fill = "white";
+      app.stage.addChild(mesPh);
+
+      // 文字(実験を行った回数:)を表示
+      const mesEx = new PIXI.Text("実験を行った回数:");
+      mesEx.x = 520;
+      mesEx.y = 50;
+      mesEx.style.fill = "white";
+      app.stage.addChild(mesEx);
+
+      // 文字(実験による確率)を表示
+      const mesPro = new PIXI.Text("実験による確率");
+      mesPro.x = 520;
+      mesPro.y = 150;
+      mesPro.style.fill = "white";
+      app.stage.addChild(mesPro);
+
+      
+      // 結果(当該事象が起こった測定値)を表示
+      if(sumPh == 0){
+        const mesumPh = new PIXI.Text(sumPh);
+        mesumPh.x = 750;
+        mesumPh.y = 10;
+        mesumPh.style.fill = "yellow";
+        app.stage.addChild(mesumPh);
+      }
+
+      // 合計実験回数を表示(途中)
+      function showsumEx(sumEx){
+        sumEx += 1;
+        const sumExcover = new PIXI.Graphics();
+        sumExcover.x = 750;
+        sumExcover.y = 50;
+        sumExcover.style.fill = 0x556b2f;
+
+      }
+      
+      // スイッチを押した回数/実験回数を管理
+      function switchCounter(sumSw,e){
+        if(sumSw < 4){
+          sumSw += 1;
+          return sumSw;
+        }else if(sumSw = 4){
+          sumSw = 0;
+          /*
+          Rball = 0; // 赤玉が出た回数
+          Bball = 0; // 青玉
+          Yball = 0; // 黄玉
+          Wball = 0; // 白玉 */
+          sumEx += 1;
+          console.log(e);
+          alert(sumEx);
+          return sumSw;
+        }
+      }
+
+      // 玉を表示する関数
+      function addBall(){
+        const ball = new PIXI.Graphics();
+        const color = Math.floor(Math.random() * 4); // 0, 1, 2, 3の乱数
+        switch(color){
+          case 0:
+            //Wball += 1;
+            ball.beginFill(0xffffff); // 白
+            ball.drawCircle(0,0,40); // (中心x,中心y,半径)
+            ball.endFill();
+            break;
+          case 1:
+            //Rball += 1;
+            ball.beginFill(0xff0000); // 赤
+            ball.drawCircle(0,0,40); // (中心x,中心y,半径)
+            ball.endFill();
+            break;
+          case 2:
+            //Yball += 1;
+            ball.beginFill(0xffff00); // 黄
+            ball.drawCircle(0,0,40); // (中心x,中心y,半径)
+            ball.endFill();
+            break;
+          case 3:
+            //Bball += 1;
+            ball.beginFill(0x00ffff); // 青
+            ball.drawCircle(0,0,40); // (中心x,中心y,半径)
+            ball.endFill();
+        }
+        ball.x = ballexit.x + (ballexit.width/2);
+        ball.y = ballexit.y + (ballexit.height/2);
+        app.stage.addChild(ball);
+        //
+        sumSw = switchCounter(sumSw);
+      }
+      
+      function changecolor(e){
+        k = Math.floor( Math.random() * 4 );
+        if(k == 1){
+          // グラフィックオブジェクトの作成
+          const square4 = new PIXI.Graphics();
+          // グラフィックオブジェクトの設定
+          square4.x = 200;          // 横座標の設定
+          square4.y = 400;          // 縦座標の設定
+          // グラフィックオブジェクトの塗りつぶし設定
+          square4.beginFill(0xff0000);    // 指定の色で塗りつぶし開始準備
+          square4.drawRect(0,0,100,100);  // 矩形を描写する
+          square4.endFill();              // 塗りつぶしを完了する
+          // ステージに追加する
+          app.stage.addChild(square4);
+        }
+        else{
+          // グラフィックオブジェクトの作成
+          const square4 = new PIXI.Graphics();
+          // グラフィックオブジェクトの設定
+          square4.x = 200;          // 横座標の設定
+          square4.y = 400;          // 縦座標の設定
+          // グラフィックオブジェクトの塗りつぶし設定
+          square4.beginFill(0xffff00);    // 指定の色で塗りつぶし開始準備
+          square4.drawRect(0,0,100,100);  // 矩形を描写する
+          square4.endFill();              // 塗りつぶしを完了する
+          // ステージに追加する
+          app.stage.addChild(square4);
+        }
+      }
+      
+      // 箱L
+      const leftBox = new PIXI.Graphics(); // グラフィックオブジェクトの作成
+      //
+      leftBox.x = 50;          // 横座標の設定
+      leftBox.y = 400;          // 縦座標の設定
+      leftBox.beginFill(0xffffff);    // 指定の色で塗りつぶし開始準備
+      leftBox.drawRect(0,0,300,150);  // 矩形を描写する
+      leftBox.endFill();              // 塗りつぶしを完了する
+      app.stage.addChild(leftBox); // ステージに追加する
+      leftBox.interactive = true;　// インタラクティブをTrueに
+      leftBox.on("pointertap", changecolor); // 色変換
+
+      // 箱R
+      const rightBox = new PIXI.Graphics(); // グラフィックオブジェクトの作成
+      //
+      rightBox.x = 450;          // 横座標の設定
+      rightBox.y = 400;          // 縦座標の設定
+      rightBox.beginFill(0xffffff);    // 指定の色で塗りつぶし開始準備
+      rightBox.drawRect(0,0,300,150);  // 矩形を描写する
+      rightBox.endFill();              // 塗りつぶしを完了する
+      app.stage.addChild(rightBox); // ステージに追加する
+      rightBox.interactive = true;　// インタラクティブをTrueに
+
+
+      // 玉を出す機械
+      const machine = new PIXI.Graphics(); // グラフィックオブジェクトの作成
+      //
+      machine.x = 100;          // 横座標の設定
+      machine.y = 100;          // 縦座標の設定
+      machine.beginFill(0xffffff);    // 指定の色で塗りつぶし開始準備
+      machine.drawRect(0,0,400,250);  // 矩形を描写する
+      machine.endFill();              // 塗りつぶしを完了する
+      app.stage.addChild(machine); // ステージに追加する
+      machine.interactive = true; // インタラクティブをTrueに
+
+      // スイッチ
+      const ballswitch = new PIXI.Graphics(); // グラフィックオブジェクトの作成
+      //
+      ballswitch.x = 120;
+      ballswitch.y = 120;
+      ballswitch.beginFill(0x333333);
+      ballswitch.drawRect(0,0,150,150);
+      ballswitch.endFill();
+      app.stage.addChild(ballswitch);
+      ballswitch.interactive = true;
+      ballswitch.on("pointertap", addBall); // クリックしたら玉が表れる
+
+      // ボール取り出し口1
+      const ballexit = new PIXI.Graphics(); // グラフィックオブジェクトの作成
+      //
+      ballexit.x = 320;
+      ballexit.y = 270;
+      ballexit.beginFill(0x333333);
+      ballexit.drawRect(0,0,160,80);
+      ballexit.endFill();
+      app.stage.addChild(ballexit);
+      ballexit.interactive = true;
+
+      // ボール取り出し口2
+      const ballexit2 = new PIXI.Graphics(); // グラフィックオブジェクトの作成
+      //
+      ballexit2.beginFill(0x333333);
+      ballexit2.drawCircle(ballexit.x + (ballexit.width/2),ballexit.y,(ballexit.width/2)); // (中心x,中心y,半径)
+      ballexit2.endFill();
+      app.stage.addChild(ballexit2);
+      ballexit2.interactive = true;
+      
+      // 文字(箱L)を表示
+      const nameL = new PIXI.Text("L");
+      nameL.x = 60;
+      nameL.y = 400;
+      nameL.style.fill = "black";
+      app.stage.addChild(nameL);
+
+      // 文字(箱R)を表示
+      const nameR = new PIXI.Text("R");
+      nameR.x = 460;
+      nameR.y = 400;
+      nameR.style.fill = "black";
+      app.stage.addChild(nameR);
+
+      // 文字(push)を表示
+      const Push = new PIXI.Text("Push");
+      Push.x = ballswitch.x + (ballswitch.width/2) -30;
+      Push.y = ballswitch.y + (ballswitch.height/2) -15;
+      Push.style.fill = "white";
+      app.stage.addChild(Push);
+
+      /*
+      // 画像入れたいけどこれだとうまくいかない
+      const boxL = new PIXI.Texture.from("./pasticCase.png");
+      const boxLsprite = new PIXI.Sprite(boxL);
+      boxLsprite.scale.x = 5;
+      boxLsprite.scale.y = 5;
+      boxLsprite.x = app.screen.width / 2;
+      boxLsprite.y = app.screen.height / 2;
+      app.stage.addChild(boxLsprite);
+      */
+
+      /*
+      // ゲームループを実装
+      app.ticker.add(delta => this.gameloop(delta,square));
+      
+      // イベントリスナー登録(ブラウザが持つ機能なのでwindowという変数を呼び出す)
+      // 第1引数：キーイベントが何か
+      // 第2引数：その時に実行したい関数(ここではアロー関数を用いている)
+      window.addEventListener("keydown", (event) => { this.downHandler(event) },false);
+      window.addEventListener("keyup", (event) => { this.upHandler(event) },false);
+    
+      // downHandlerを定義
+      function downHandler(event) {
+        switch(event.key) {
+          case 'ArrowRight':
+            keyFlag = 1;
+            break;
+          case 'ArrowLeft':
+            keyFlag = 2;
+            break;
+          case 'ArrowDown':
+            keyFlag = 3;
+            break;
+          case 'ArrowUp':
+            keyFlag = 4;
+            break;
+        }
+      }
+ 
+      // upHandlerを定義
+      function upHandler(event) {
+        keyFlag = 0;
+      }
+
+      // ゲームループで動かす関数の中身(毎フレーム実行される)
+      function gameloop(delta, square) {
+        // 0～3の乱数を発生させてswitchで条件分岐
+        // Math.random() * 4 をすることで0~3の数値を取得可能
+        // このままだと小数点も含まれるのでMath.floorで小数点を切り捨てている
+        
+        switch(keyFlag) {
+          case 1:
+            square.x += 20;
+          case 2:
+            square.x -= 10;
+          case 3:
+            square.y += 20;
+          case 4:
+            square.y -= 10;
+        }
+      }*/
+    </script>
+  </body>
+
+</html>
