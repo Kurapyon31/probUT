@@ -11,19 +11,31 @@
       }
     </style>
     <script src="https://pixijs.download/release/pixi.js"></script>
-    <button class="btn">リセット</button>
-    <!link rel="stylesheet" href="practice.css">
+    <link rel="stylesheet" href="practice.css">
   </head>
 
   <body>
     <div class="header">
-
+      Challenge the University of Tokyo entrance exam!
+    </div>
+    <div class="abst">
+      本当に求めた通りの確率になるのか!? 実験をして調べよう!
+    </div>
+    <div class="hardness">
+      <ul>
+        <li>　難易度(~中学生): ★★★☆☆</li>
+        <li>　難易度(高校生~): ★☆☆☆☆</li>
+      </ul>
+    </div>
+    <div class="question">
+      
     </div>
     <div class="main">
       <script>
         // 「padding: 値;」とすると、上下左右すべての方向にその大きさの余白が追加されます
         // 「padding-top: 値;」などとすると、その方向のみに余白が追加されます
         // padding は border の内側の余白、margin は border の外側の余白
+        //<button class="btn">リセット</button> がhead に入っていた元は 
 
         let sumEx = 0; // 実験の合計回数
         let sumSw = 0; // スイッチを押した回数(max5)
@@ -41,8 +53,8 @@
 
 
         // pixi.jsのアプリケーションを作成
-        const width = 1800;
-        const height = 2400;
+        const width = 800;
+        const height = 800;
         const widRatio = 0.9;
         const heiRatio = 0.95;
 
