@@ -3,7 +3,7 @@
 
   <head>
     <meta charset="utf-8">
-    <title>制作展pixijs練習1</title>
+    <title>制作展_確率であそぼ_UT</title>
     <style>
       * {
         padding: 0;
@@ -16,778 +16,864 @@
   </head>
 
   <body>
-    <script>
-      // 「padding: 値;」とすると、上下左右すべての方向にその大きさの余白が追加されます
-      // 「padding-top: 値;」などとすると、その方向のみに余白が追加されます
-      // padding は border の内側の余白、margin は border の外側の余白
+    <div class="header">
 
-      let sumEx = 0; // 実験の合計回数
-      let sumSw = 0; // スイッチを押した回数(max5)
-      let sumPh = 0; // 当該事象の起こった回数
+    </div>
+    <div class="main">
+      <script>
+        // 「padding: 値;」とすると、上下左右すべての方向にその大きさの余白が追加されます
+        // 「padding-top: 値;」などとすると、その方向のみに余白が追加されます
+        // padding は border の内側の余白、margin は border の外側の余白
 
-      let Rball = 0; // 赤玉が出た回数
-      let Bball = 0; // 青玉
-      let Yball = 0; // 黄玉
-      let Wball = 0; // 白玉
-      
-      let numberBoxL = 0; // 左の箱に入っているボールの数
-      let numberBoxR = 0; // 右の箱に入っているボールの数
+        let sumEx = 0; // 実験の合計回数
+        let sumSw = 0; // スイッチを押した回数(max5)
+        let sumPh = 0; // 当該事象の起こった回数
 
-      let whichBox = 0; // 0ならば箱L
+        let Rball = 0; // 赤玉が出た回数
+        let Bball = 0; // 青玉
+        let Yball = 0; // 黄玉
+        let Wball = 0; // 白玉
+        
+        let numberBoxL = 0; // 左の箱に入っているボールの数
+        let numberBoxR = 0; // 右の箱に入っているボールの数
+
+        let whichBox = 0; // 0ならば箱L
 
 
-      // pixi.jsのアプリケーションを作成
-      const app = new PIXI.Application({
-        width: 800,
-        height: 800,
-        backgroundColor: 0x556b2f, // 背景色
-      });
- 
-      // bodyにpixi.jsのview(ステージ)を追加する
-      document.body.appendChild(app.view);
+        // pixi.jsのアプリケーションを作成
+        const width = 800;
+        const height = 800;
+        const widRatio = 0.9;
+        const heiRatio = 0.95;
 
-      // 文字(実験して確かめよう!)を表示
-      const message = new PIXI.Text("Let's experiment and confirm!");
-      message.x = 10;
-      message.y = 10;
-      message.style.fill = "white";
-      app.stage.addChild(message);
-      message.interactive = true;
-      message.on("pointertap", () => (message.style.fill = "0xF0E68C"));
+        const app = new PIXI.Application({
+          width: width,
+          height: height,
+          backgroundColor: 0x556b2f, // 背景色
+        });
+  
+        // bodyにpixi.jsのview(ステージ)を追加する
+        document.body.appendChild(app.view);
 
-      // 文字(Lに4色入った回数:)を表示
-      const mesPh = new PIXI.Text("Lに4色入った回数:");
-      mesPh.x = 520;
-      mesPh.y = 10;
-      mesPh.style.fill = "white";
-      app.stage.addChild(mesPh);
+        /*
+        // お試し
+        document.getElementById("game").appendChild(app.renderer.view);
 
-      // 文字(実験を行った回数:)を表示
-      const mesEx = new PIXI.Text("実験を行った回数:");
-      mesEx.x = 520;
-      mesEx.y = 50;
-      mesEx.style.fill = "white";
-      app.stage.addChild(mesEx);
+        function screenResize() {
+            let wid = widRatio*window.innerWidth;//ゲームを表示できる最大横幅
+            let hei = heiRatio*window.innerHeight;//ゲームを表示できる最大縦幅
+            let x = width;
+            let y = height;
+            app.stage.scale.x = app.stage.scale.y = 1;//スクリーン幅が十分の時は画面倍率を1にする
+            resizeRatio = Math.min(wid/width, hei/height);//横幅と縦幅の、ゲーム画面に対する比のうち小さい方に合わせる
+            if(wid < width || hei < height) {//スクリーン幅が足りないとき
+                //リサイズ倍率を調整
+                x = width*resizeRatio; 
+                y = height*resizeRatio; 
+                app.stage.scale.x = resizeRatio;
+                app.stage.scale.y = resizeRatio;
+            }
+            app.renderer.resize(x, y);//レンダラーをリサイズ
+        }
+        window.addEventListener("load", screenResize);//ロード時に画面サイズを変える
+        window.addEventListener('resize',screenResize,false);//ウィンドウの大きさが変わったらその都度画面サイズを変える
+        */
 
-      // 文字(実験による確率)を表示
-      const mesPro = new PIXI.Text("実験による確率");
-      mesPro.x = 520;
-      mesPro.y = 150;
-      mesPro.style.fill = "white";
-      app.stage.addChild(mesPro);
-      
-      // 結果(当該事象が起こった測定値)を表示
-      if(sumPh == 0){
-        let mesumPh = new PIXI.Text(sumPh);
-        mesumPh.x = 750;
-        mesumPh.y = 10;
-        mesumPh.style.fill = "yellow";
-        app.stage.addChild(mesumPh);
-      }
-      // 結果(実験を行った回数)を表示
-      if(sumEx == 0){
-        const mesumEx = new PIXI.Text(sumEx);
-        mesumEx.x = 750;
-        mesumEx.y = 50;
-        mesumEx.style.fill = "yellow";
-        app.stage.addChild(mesumEx);
-      }
+        // 文字(実験して確かめよう!)を表示
+        const message = new PIXI.Text("Let's experiment and confirm!");
+        message.x = 10;
+        message.y = 10;
+        message.style.fill = "white";
+        app.stage.addChild(message);
+        message.interactive = true;
+        message.on("pointertap", () => (message.style.fill = "0xF0E68C"));
 
-      // 合計実験回数を表示
-      function showsumEx(sumEx){
-        sumEx += 1;
-        const sumExcover = new PIXI.Graphics(); // その前の数字を塗りつぶし
-        sumExcover.x = 750;
-        sumExcover.y = 50;
-        sumExcover.beginFill(0x556b2f);
-        sumExcover.drawRect(0,0,100,30);
-        sumExcover.endFill();
-        app.stage.addChild(sumExcover);
-        //
-        const mesumEx = new PIXI.Text(sumEx); // 新しい数字を表示
-        mesumEx.x = 750;
-        mesumEx.y = 50;
-        mesumEx.style.fill = "yellow";
-        app.stage.addChild(mesumEx);
-        return sumEx;
-      }
+        // 文字(Lに4色入った回数:)を表示
+        const mesPh = new PIXI.Text("Lに4色入った回数:");
+        mesPh.x = 520;
+        mesPh.y = 10;
+        mesPh.style.fill = "white";
+        app.stage.addChild(mesPh);
 
-      // 当該事象の起こった回数を表示
-      function showsumPh(numberBoxL,sumPh){
-        if(numberBoxL == 4){ // 箱Lに入った玉が4個(4色)のときのみ
-          sumPh += 1; // 当該事象が起こった回数を追加
+        // 文字(実験を行った回数:)を表示
+        const mesEx = new PIXI.Text("実験を行った回数:");
+        mesEx.x = 520;
+        mesEx.y = 50;
+        mesEx.style.fill = "white";
+        app.stage.addChild(mesEx);
 
-          const sumPhcover = new PIXI.Graphics(); // その前の数字を塗りつぶし
-          sumPhcover.x = 750;
-          sumPhcover.y = 10;
-          sumPhcover.beginFill(0x556b2f);
-          sumPhcover.drawRect(0,0,100,30);
-          sumPhcover.endFill();
-          app.stage.addChild(sumPhcover);
-          //
-          let mesumPh = new PIXI.Text(sumPh); // 新しい数字を表示
+        // 文字(実験による確率)を表示
+        const mesPro = new PIXI.Text("実験による確率:");
+        mesPro.x = 520;
+        mesPro.y = 100;
+        mesPro.style.fill = "white";
+        app.stage.addChild(mesPro);
+
+        // 線(確率の分数用)を表示
+        const BunsuLine = new PIXI.Graphics();
+        BunsuLine.lineStyle(5,0xffffff).moveTo(550,200).lineTo(620,200);
+        app.stage.addChild(BunsuLine);
+
+        // ＝(確率)を表示
+        const BunsuEqual = new PIXI.Text("=");
+        BunsuEqual.x = 640;
+        BunsuEqual.y = 185;
+        BunsuEqual.style.fill = "white";
+        app.stage.addChild(BunsuEqual);
+
+        // 線(確率を囲う用)を表示
+        const ProbSquare = new PIXI.Graphics();
+        ProbSquare.lineStyle(3,0xffffff).moveTo(525,140).lineTo(525,270);
+        ProbSquare.lineStyle(3,0xffffff).moveTo(525,270).lineTo(785,270);
+        ProbSquare.lineStyle(3,0xffffff).moveTo(785,270).lineTo(785,120);
+        ProbSquare.lineStyle(3,0xffffff).moveTo(785,120).lineTo(730,120);
+        app.stage.addChild(ProbSquare);
+        
+        // 結果(当該事象が起こった測定値)を表示
+        if(sumPh == 0){
+          let mesumPh = new PIXI.Text(sumPh);
           mesumPh.x = 750;
           mesumPh.y = 10;
           mesumPh.style.fill = "yellow";
           app.stage.addChild(mesumPh);
         }
-        return sumPh;
-      }
+        // 結果(実験を行った回数)を表示
+        if(sumEx == 0){
+          const mesumEx = new PIXI.Text(sumEx);
+          mesumEx.x = 750;
+          mesumEx.y = 50;
+          mesumEx.style.fill = "yellow";
+          app.stage.addChild(mesumEx);
+        }
 
-      // 残り玉数を表示
-      function showrestBall(sumSw,e){
-        const resBacover = new PIXI.Graphics(); // その前の数字を塗りつぶし
-        resBacover.x = restBall.x + 75;
-        resBacover.y = restBall.y;
-        resBacover.beginFill(0xffffff);
-        resBacover.drawRect(0,0,30,30);
-        resBacover.endFill();
-        app.stage.addChild(resBacover);
+        // 合計実験回数を表示
+        function showsumEx(sumEx){
+          sumEx += 1;
+          const sumExcover = new PIXI.Graphics(); // その前の数字を塗りつぶし
+          sumExcover.x = 750;
+          sumExcover.y = 50;
+          sumExcover.beginFill(0x556b2f);
+          sumExcover.drawRect(0,0,100,30);
+          sumExcover.endFill();
+          app.stage.addChild(sumExcover);
+          //
+          const mesumEx = new PIXI.Text(sumEx); // 新しい数字を表示
+          mesumEx.x = 750;
+          mesumEx.y = 50;
+          mesumEx.style.fill = "yellow";
+          app.stage.addChild(mesumEx);
+          return sumEx;
+        }
+
+        // 当該事象の起こった回数を表示
+        function showsumPh(numberBoxL,sumPh){
+          if(numberBoxL == 4){ // 箱Lに入った玉が4個(4色)のときのみ
+            sumPh += 1; // 当該事象が起こった回数を追加
+
+            const sumPhcover = new PIXI.Graphics(); // その前の数字を塗りつぶし
+            sumPhcover.x = 750;
+            sumPhcover.y = 10;
+            sumPhcover.beginFill(0x556b2f);
+            sumPhcover.drawRect(0,0,100,30);
+            sumPhcover.endFill();
+            app.stage.addChild(sumPhcover);
+            //
+            let mesumPh = new PIXI.Text(sumPh); // 新しい数字を表示
+            mesumPh.x = 750;
+            mesumPh.y = 10;
+            mesumPh.style.fill = "yellow";
+            app.stage.addChild(mesumPh);
+          }
+          return sumPh;
+        }
+
+        // 残り玉数を表示
+        function showrestBall(sumSw,e){
+          const resBacover = new PIXI.Graphics(); // その前の数字を塗りつぶし
+          resBacover.x = restBall.x + 75;
+          resBacover.y = restBall.y;
+          resBacover.beginFill(0xffffff);
+          resBacover.drawRect(0,0,30,30);
+          resBacover.endFill();
+          app.stage.addChild(resBacover);
+          
+          const meresBa = new PIXI.Text(5-sumSw); // 新しい数字を表示
+          meresBa.x = restBall.x + 75;
+          meresBa.y = restBall.y;
+          meresBa.style.fill = "red";
+          app.stage.addChild(meresBa);
+        }
+
+
+        // 箱Lと箱Rの初期設定
+        function setBox(){
+          // 箱Lの枠
+          const leftBoxEdge = new PIXI.Graphics(); // グラフィックオブジェクトの作成
+          //
+          leftBoxEdge.x = 40;          // 横座標の設定
+          leftBoxEdge.y = 390;          // 縦座標の設定
+          leftBoxEdge.beginFill(0xe6cf8a);    // 指定の色で塗りつぶし開始準備
+          leftBoxEdge.drawRect(0,0,320,270);  // 矩形を描写する
+          leftBoxEdge.endFill();              // 塗りつぶしを完了する
+          app.stage.addChild(leftBoxEdge); // ステージに追加する
+
+          // 箱L
+          const leftBox = new PIXI.Graphics(); // グラフィックオブジェクトの作成
+          //
+          leftBox.x = leftBoxEdge.x + 10;          // 横座標の設定
+          leftBox.y = leftBoxEdge.y + 10;          // 縦座標の設定
+          leftBox.beginFill(0x66500f);    // 指定の色で塗りつぶし開始準備
+          leftBox.drawRect(0,0,leftBoxEdge.width - 20,leftBoxEdge.height - 20);  // 矩形を描写する
+          leftBox.endFill();              // 塗りつぶしを完了する
+          app.stage.addChild(leftBox); // ステージに追加する
+          leftBox.interactive = true;　// インタラクティブをTrueに
+          //leftBox.on("pointertap", changecolor); // 色変換
+
+          // 箱Rの枠
+          const rightBoxEdge = new PIXI.Graphics(); // グラフィックオブジェクトの作成
+          //
+          rightBoxEdge.x = 440;          // 横座標の設定
+          rightBoxEdge.y = 390;          // 縦座標の設定
+          rightBoxEdge.beginFill(0xe6cf8a);    // 指定の色で塗りつぶし開始準備
+          rightBoxEdge.drawRect(0,0,320,270);  // 矩形を描写する
+          rightBoxEdge.endFill();              // 塗りつぶしを完了する
+          app.stage.addChild(rightBoxEdge); // ステージに追加する
+
+          // 箱R
+          const rightBox = new PIXI.Graphics(); // グラフィックオブジェクトの作成
+          //
+          rightBox.x = rightBoxEdge.x + 10;          // 横座標の設定
+          rightBox.y = rightBoxEdge.y + 10;          // 縦座標の設定
+          rightBox.beginFill(0x66500f);    // 指定の色で塗りつぶし開始準備
+          rightBox.drawRect(0,0,rightBoxEdge.width - 20,rightBoxEdge.height - 20);  // 矩形を描写する
+          rightBox.endFill();              // 塗りつぶしを完了する
+          app.stage.addChild(rightBox); // ステージに追加する
+          rightBox.interactive = true;　// インタラクティブをTrueに
+
+          // 文字(箱L)を表示
+          const nameL = new PIXI.Text("L");
+          nameL.x = 60;
+          nameL.y = 400;
+          nameL.style.fill = "white";
+          app.stage.addChild(nameL);
+
+          // 文字(箱R)を表示
+          const nameR = new PIXI.Text("R");
+          nameR.x = 460;
+          nameR.y = 400;
+          nameR.style.fill = "white";
+          app.stage.addChild(nameR);
+        }
+
+        setBox(); // 箱Lと箱Rを表示
+
+        // 文字(正しい箱に分類しよう)を表示
+        function showDivBallMes(){
+          const mesDivball = new PIXI.Text("条件に従ってLまたはRの箱に玉を入れよう！");
+          mesDivball.x = 120;
+          mesDivball.y = 700;
+          mesDivball.style.fill = "white";
+          contaDivball.addChild(mesDivball);
+        }
+        // 文字(正しい箱に分類しよう)を非表示
+        function delDivBallMes(){
+          contaDivball.removeChildren();
+        }
+        // 文字(箱が正しくないor箱に入ってない)を表示
+        function showDivBallMes2(){
+          const mesDivball2 = new PIXI.Text("まだ箱に入ってない");
+          mesDivball2.x = 50;
+          mesDivball2.y = 700;
+          mesDivball2.style.fill = "yellow";
+          contaDivball2.addChild(mesDivball2);
+
+          const mesDivball3 = new PIXI.Text("または");
+          mesDivball3.x = 300;
+          mesDivball3.y = 700;
+          mesDivball3.style.fill = "white";
+          contaDivball2.addChild(mesDivball3);
+
+          const mesDivball4 = new PIXI.Text("箱が間違っている");
+          mesDivball4.x = 400;
+          mesDivball4.y = 700;
+          mesDivball4.style.fill = "yellow";
+          contaDivball2.addChild(mesDivball4);
+
+          const mesDivball5 = new PIXI.Text("状態だよ!");
+          mesDivball5.x = 630;
+          mesDivball5.y = 700;
+          mesDivball5.style.fill = "white";
+          contaDivball2.addChild(mesDivball5);
+        }
+        // 文字(箱が正しくないor箱に入ってない)を非表示
+        function delDivBallMes2(){
+          contaDivball2.removeChildren();
+        }
         
-        const meresBa = new PIXI.Text(5-sumSw); // 新しい数字を表示
-        meresBa.x = restBall.x + 75;
-        meresBa.y = restBall.y;
-        meresBa.style.fill = "red";
-        app.stage.addChild(meresBa);
-      }
-
-
-      // 箱Lと箱Rの初期設定
-      function setBox(){
-        // 箱Lの枠
-        const leftBoxEdge = new PIXI.Graphics(); // グラフィックオブジェクトの作成
-        //
-        leftBoxEdge.x = 40;          // 横座標の設定
-        leftBoxEdge.y = 390;          // 縦座標の設定
-        leftBoxEdge.beginFill(0xe6cf8a);    // 指定の色で塗りつぶし開始準備
-        leftBoxEdge.drawRect(0,0,320,270);  // 矩形を描写する
-        leftBoxEdge.endFill();              // 塗りつぶしを完了する
-        app.stage.addChild(leftBoxEdge); // ステージに追加する
-
-        // 箱L
-        const leftBox = new PIXI.Graphics(); // グラフィックオブジェクトの作成
-        //
-        leftBox.x = leftBoxEdge.x + 10;          // 横座標の設定
-        leftBox.y = leftBoxEdge.y + 10;          // 縦座標の設定
-        leftBox.beginFill(0x66500f);    // 指定の色で塗りつぶし開始準備
-        leftBox.drawRect(0,0,leftBoxEdge.width - 20,leftBoxEdge.height - 20);  // 矩形を描写する
-        leftBox.endFill();              // 塗りつぶしを完了する
-        app.stage.addChild(leftBox); // ステージに追加する
-        leftBox.interactive = true;　// インタラクティブをTrueに
-        //leftBox.on("pointertap", changecolor); // 色変換
-
-        // 箱Rの枠
-        const rightBoxEdge = new PIXI.Graphics(); // グラフィックオブジェクトの作成
-        //
-        rightBoxEdge.x = 440;          // 横座標の設定
-        rightBoxEdge.y = 390;          // 縦座標の設定
-        rightBoxEdge.beginFill(0xe6cf8a);    // 指定の色で塗りつぶし開始準備
-        rightBoxEdge.drawRect(0,0,320,270);  // 矩形を描写する
-        rightBoxEdge.endFill();              // 塗りつぶしを完了する
-        app.stage.addChild(rightBoxEdge); // ステージに追加する
-
-        // 箱R
-        const rightBox = new PIXI.Graphics(); // グラフィックオブジェクトの作成
-        //
-        rightBox.x = rightBoxEdge.x + 10;          // 横座標の設定
-        rightBox.y = rightBoxEdge.y + 10;          // 縦座標の設定
-        rightBox.beginFill(0x66500f);    // 指定の色で塗りつぶし開始準備
-        rightBox.drawRect(0,0,rightBoxEdge.width - 20,rightBoxEdge.height - 20);  // 矩形を描写する
-        rightBox.endFill();              // 塗りつぶしを完了する
-        app.stage.addChild(rightBox); // ステージに追加する
-        rightBox.interactive = true;　// インタラクティブをTrueに
-
-        // 文字(箱L)を表示
-        const nameL = new PIXI.Text("L");
-        nameL.x = 60;
-        nameL.y = 400;
-        nameL.style.fill = "white";
-        app.stage.addChild(nameL);
-
-        // 文字(箱R)を表示
-        const nameR = new PIXI.Text("R");
-        nameR.x = 460;
-        nameR.y = 400;
-        nameR.style.fill = "white";
-        app.stage.addChild(nameR);
-      }
-
-      setBox(); // 箱Lと箱Rを表示
-
-      // 文字(正しい箱に分類しよう)を表示
-      function showDivBallMes(){
-        const mesDivball = new PIXI.Text("条件に従ってLまたはRの箱に玉を入れよう！");
-        mesDivball.x = 120;
-        mesDivball.y = 700;
-        mesDivball.style.fill = "white";
-        contaDivball.addChild(mesDivball);
-      }
-      // 文字(正しい箱に分類しよう)を非表示
-      function delDivBallMes(){
-        contaDivball.removeChildren();
-      }
-      // 文字(箱が正しくないor箱に入ってない)を表示
-      function showDivBallMes2(){
-        const mesDivball2 = new PIXI.Text("まだ箱に入ってない");
-        mesDivball2.x = 50;
-        mesDivball2.y = 700;
-        mesDivball2.style.fill = "yellow";
-        contaDivball2.addChild(mesDivball2);
-
-        const mesDivball3 = new PIXI.Text("または");
-        mesDivball3.x = 300;
-        mesDivball3.y = 700;
-        mesDivball3.style.fill = "white";
-        contaDivball2.addChild(mesDivball3);
-
-        const mesDivball4 = new PIXI.Text("箱が間違っている");
-        mesDivball4.x = 400;
-        mesDivball4.y = 700;
-        mesDivball4.style.fill = "yellow";
-        contaDivball2.addChild(mesDivball4);
-
-        const mesDivball5 = new PIXI.Text("状態だよ!");
-        mesDivball5.x = 630;
-        mesDivball5.y = 700;
-        mesDivball5.style.fill = "white";
-        contaDivball2.addChild(mesDivball5);
-      }
-      // 文字(箱が正しくないor箱に入ってない)を非表示
-      function delDivBallMes2(){
-        contaDivball2.removeChildren();
-      }
-      
-      // スイッチを押した回数/実験回数を管理
-      function switchCounter(sumSw,e){
-        if(sumSw < 4){
-          sumSw += 1;
-          showrestBall(sumSw); // 残り玉数
-          return sumSw;
-        }else if(sumSw == 4){
-          // 各種変数のリセット
-          sumSw = 0;
-          Rball = 0; // 赤玉が出た回数
-          Bball = 0; // 青玉
-          Yball = 0; // 黄玉
-          Wball = 0; // 白玉
-          showrestBall(5); // 残り玉数0を表示
-          showResultButtun(); // 結果を反映ボタンを表示
-          return sumSw;
-        }
-      }
-
-      // 当該玉が箱L,Rのどちらに属すべきか判断する関数
-      function ballJudge(Colorball){
-        if(Colorball == 1){
-          whichBox = 0; // 箱L
-          numberBoxL += 1; // 箱Lに入っている玉数+1
-          return whichBox;
-        }else if(Colorball != 1){
-          whichBox = 1; // 箱R
-          numberBoxR += 1; // 箱Rに入っている玉数+1
-          return whichBox;
-        }
-      }
-      
-      // 玉を追加する関数
-      function addBall(){
-        if(sumSw == 0){
-          showDivBallMes(); // 分類しよう!を表示
-          let ballNo1 = new PIXI.Graphics(); // ボールを一つ作成
-          let color = Math.floor(Math.random() * 4); // 0, 1, 2, 3の乱数で4色分け
-          switch(color){ // 色によって場合分け
-            case 0:
-              Wball += 1; // 白色が出た回数を+1
-              ballNo1.beginFill(0xffffff); // 白
-              ballNo1.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo1.endFill();
-              whichBoxNo1 = ballJudge(Wball); // この玉がL,Rのどちらの箱に入るべきかを判断
-              break;
-            case 1:
-              Rball += 1; // 赤色が出た回数を+1
-              ballNo1.beginFill(0xff0000); // 赤
-              ballNo1.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo1.endFill();
-              whichBoxNo1 = ballJudge(Rball);
-              break;
-            case 2:
-              Yball += 1; // 黄色が出た回数を+1
-              ballNo1.beginFill(0xffff00); // 黄
-              ballNo1.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo1.endFill();
-              whichBoxNo1 = ballJudge(Yball);
-              break;
-            case 3:
-              Bball += 1; // 青色が出た回数を+1
-              ballNo1.beginFill(0x00ffff); // 青
-              ballNo1.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo1.endFill();
-              whichBoxNo1 = ballJudge(Bball);
-              break;
-          }
-          ballNo1.x = ballexit.x + (ballexit.width/2); // ボールが出てくる場所
-          ballNo1.y = ballexit.y + (ballexit.height/2); // 同上
-          container.addChild(ballNo1); // ボール専用のコンテナに玉を追加
-          ballNo1.interactive = true; // アクティブに
-          ballNo1.buttonMode = true; // カーソルを重ねると矢印が手の形に変わる
-          // ドラッグ&ドロップの実装
-          ballNo1.on('pointerdown',  onBallPointerDownNo1) // 押したとき
-                 .on('pointerup',   onBallPointerUpNo1); // 離したとき
-          // 
-          function onBallPointerDownNo1() { // 押したとき用
-            ballNo1.omajinai = true;
-            ballNo1.on('pointermove', moveBallNo1);
-          }
-          function onBallPointerUpNo1(){ // 離したとき用
-            ballNo1.omajinai = false;
-            ballNo1.on('pointermove', moveBallNo1);
-          }
-          // ボールを動かす
-          function moveBallNo1(e) {
-            if(ballNo1.omajinai){ // 押しているときだけ
-              let position = e.data.getLocalPosition(app.stage); // カーソルの位置を玉の位置と連動
-              // 位置変更
-              ballNo1.x = position.x;
-              ballNo1.y = position.y;
-              delDivBallMes(); // 分類しよう!の文字を非表示に
-              showDivBallMes2(); // まだ分類ができてないよ!を表示
-              if(whichBoxNo1 == 0){ // 箱Lに入るべきときは
-                if(ballNo1.x > 90 & ballNo1.x < 310 & ballNo1.y > 440 & ballNo1.y < 610){ // 箱Lの位置にあるなら
-                  delDivBallMes2(); // まだ分類できてないよ!を非表示
-                }
-              }else{ // 箱Rに入るべきときは
-                if(ballNo1.x > 490 & ballNo1.x < 710 & ballNo1.y > 440 & ballNo1.y < 610){ // 箱Rの位置にあるなら
-                  delDivBallMes2(); // まだ分類できてないよ!を非表示
-                }
-              }  
-            }
-          }
-        // 以下2個目～5個目のボールに対して全く同じ実装を書いている
-        }else if(sumSw == 1){
-          showDivBallMes();
-          let ballNo2 = new PIXI.Graphics();
-          let color = Math.floor(Math.random() * 4); // 0, 1, 2, 3の乱数
-          switch(color){
-            case 0:
-              Wball += 1;
-              ballNo2.beginFill(0xffffff); // 白
-              ballNo2.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo2.endFill();
-              whichBoxNo2 = ballJudge(Wball);
-              break;
-            case 1:
-              Rball += 1;
-              ballNo2.beginFill(0xff0000); // 赤
-              ballNo2.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo2.endFill();
-              whichBoxNo2 = ballJudge(Rball);
-              break;
-            case 2:
-              Yball += 1;
-              ballNo2.beginFill(0xffff00); // 黄
-              ballNo2.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo2.endFill();
-              whichBoxNo2 = ballJudge(Yball);
-              break;
-            case 3:
-              Bball += 1;
-              ballNo2.beginFill(0x00ffff); // 青
-              ballNo2.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo2.endFill();
-              whichBoxNo2 = ballJudge(Bball);
-              break;
-          }
-          ballNo2.x = ballexit.x + (ballexit.width/2);
-          ballNo2.y = ballexit.y + (ballexit.height/2);
-          container.addChild(ballNo2);
-          ballNo2.interactive = true;
-          ballNo2.buttonMode = true;
-          ballNo2.on('pointerdown',  onBallPointerDownNo2) // 押したとき
-                 .on('pointerup',   onBallPointerUpNo2); // 離したとき
-          function onBallPointerDownNo2() {
-            ballNo2.omajinai = true;
-            ballNo2.on('pointermove', moveBallNo2);
-          }
-          function onBallPointerUpNo2(){
-            ballNo2.omajinai = false;
-            ballNo2.on('pointermove', moveBallNo2);
-          }
-          function moveBallNo2(e) {
-            if(ballNo2.omajinai){
-              let position = e.data.getLocalPosition(app.stage);
-              ballNo2.x = position.x;
-              ballNo2.y = position.y;
-              delDivBallMes();
-              showDivBallMes2();
-              if(whichBoxNo2 == 0){
-                if(ballNo2.x > 90 & ballNo2.x < 310 & ballNo2.y > 440 & ballNo2.y < 610){
-                  delDivBallMes2();
-                }
-              }else{
-                if(ballNo2.x > 490 & ballNo2.x < 710 & ballNo2.y > 440 & ballNo2.y < 610){
-                  delDivBallMes2();
-                }
-              }  
-            }
-          }
-        }else if(sumSw == 2){
-          showDivBallMes();
-          let ballNo3 = new PIXI.Graphics();
-          let color = Math.floor(Math.random() * 4); // 0, 1, 2, 3の乱数
-          switch(color){
-            case 0:
-              Wball += 1;
-              ballNo3.beginFill(0xffffff); // 白
-              ballNo3.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo3.endFill();
-              whichBoxNo3 = ballJudge(Wball);
-              break;
-            case 1:
-              Rball += 1;
-              ballNo3.beginFill(0xff0000); // 赤
-              ballNo3.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo3.endFill();
-              whichBoxNo3 = ballJudge(Rball);
-              break;
-            case 2:
-              Yball += 1;
-              ballNo3.beginFill(0xffff00); // 黄
-              ballNo3.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo3.endFill();
-              whichBoxNo3 = ballJudge(Yball);
-              break;
-            case 3:
-              Bball += 1;
-              ballNo3.beginFill(0x00ffff); // 青
-              ballNo3.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo3.endFill();
-              whichBoxNo3 = ballJudge(Bball);
-              break;
-          }
-          ballNo3.x = ballexit.x + (ballexit.width/2);
-          ballNo3.y = ballexit.y + (ballexit.height/2);
-          container.addChild(ballNo3);
-          ballNo3.interactive = true;
-          ballNo3.buttonMode = true;
-          ballNo3.on('pointerdown',  onBallPointerDownNo3) // 押したとき
-                 .on('pointerup',   onBallPointerUpNo3); // 離したとき
-          function onBallPointerDownNo3() {
-            ballNo3.omajinai = true;
-            ballNo3.on('pointermove', moveBallNo3);
-          }
-          function onBallPointerUpNo3(){
-            ballNo3.omajinai = false;
-            ballNo3.on('pointermove', moveBallNo3);
-          }
-          function moveBallNo3(e) {
-            if(ballNo3.omajinai){
-              let position = e.data.getLocalPosition(app.stage);
-              ballNo3.x = position.x;
-              ballNo3.y = position.y;
-              delDivBallMes();
-              showDivBallMes2();
-              if(whichBoxNo3 == 0){
-                if(ballNo3.x > 90 & ballNo3.x < 310 & ballNo3.y > 440 & ballNo3.y < 610){
-                  delDivBallMes2();
-                }
-              }else{
-                if(ballNo3.x > 490 & ballNo3.x < 710 & ballNo3.y > 440 & ballNo3.y < 610){
-                  delDivBallMes2();
-                }
-              }  
-            }
-          }
-        }else if(sumSw == 3){
-          showDivBallMes();
-          let ballNo4 = new PIXI.Graphics();
-          let color = Math.floor(Math.random() * 4); // 0, 1, 2, 3の乱数
-          switch(color){
-            case 0:
-              Wball += 1;
-              ballNo4.beginFill(0xffffff); // 白
-              ballNo4.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo4.endFill();
-              whichBoxNo4 = ballJudge(Wball);
-              break;
-            case 1:
-              Rball += 1;
-              ballNo4.beginFill(0xff0000); // 赤
-              ballNo4.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo4.endFill();
-              whichBoxNo4 = ballJudge(Rball);
-              break;
-            case 2:
-              Yball += 1;
-              ballNo4.beginFill(0xffff00); // 黄
-              ballNo4.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo4.endFill();
-              whichBoxNo4 = ballJudge(Yball);
-              break;
-            case 3:
-              Bball += 1;
-              ballNo4.beginFill(0x00ffff); // 青
-              ballNo4.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo4.endFill();
-              whichBoxNo4 = ballJudge(Bball);
-              break;
-          }
-          ballNo4.x = ballexit.x + (ballexit.width/2);
-          ballNo4.y = ballexit.y + (ballexit.height/2);
-          container.addChild(ballNo4);
-          ballNo4.interactive = true;
-          ballNo4.buttonMode = true;
-          ballNo4.on('pointerdown',  onBallPointerDownNo4) // 押したとき
-                 .on('pointerup',   onBallPointerUpNo4); // 離したとき
-          function onBallPointerDownNo4() {
-            ballNo4.omajinai = true;
-            ballNo4.on('pointermove', moveBallNo4);
-          }
-          function onBallPointerUpNo4(){
-            ballNo4.omajinai = false;
-            ballNo4.on('pointermove', moveBallNo4);
-          }
-          function moveBallNo4(e) {
-            if(ballNo4.omajinai){
-              let position = e.data.getLocalPosition(app.stage);
-              ballNo4.x = position.x;
-              ballNo4.y = position.y;
-              delDivBallMes();
-              showDivBallMes2();
-              if(whichBoxNo4 == 0){
-                if(ballNo4.x > 90 & ballNo4.x < 310 & ballNo4.y > 440 & ballNo4.y < 610){
-                  delDivBallMes2();
-                }
-              }else{
-                if(ballNo4.x > 490 & ballNo4.x < 710 & ballNo4.y > 440 & ballNo4.y < 610){
-                  delDivBallMes2();
-                }
-              }  
-            }
-          }
-        }else if(sumSw == 4){
-          showDivBallMes();
-          let ballNo5 = new PIXI.Graphics();
-          let color = Math.floor(Math.random() * 4); // 0, 1, 2, 3の乱数
-          switch(color){
-            case 0:
-              Wball += 1;
-              ballNo5.beginFill(0xffffff); // 白
-              ballNo5.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo5.endFill();
-              whichBoxNo5 = ballJudge(Wball);
-              break;
-            case 1:
-              Rball += 1;
-              ballNo5.beginFill(0xff0000); // 赤
-              ballNo5.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo5.endFill();
-              whichBoxNo5 = ballJudge(Rball);
-              break;
-            case 2:
-              Yball += 1;
-              ballNo5.beginFill(0xffff00); // 黄
-              ballNo5.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo5.endFill();
-              whichBoxNo5 = ballJudge(Yball);
-              break;
-            case 3:
-              Bball += 1;
-              ballNo5.beginFill(0x00ffff); // 青
-              ballNo5.drawCircle(0,0,40); // (中心x,中心y,半径)
-              ballNo5.endFill();
-              whichBoxNo5 = ballJudge(Bball);
-              break;
-          }
-          ballNo5.x = ballexit.x + (ballexit.width/2);
-          ballNo5.y = ballexit.y + (ballexit.height/2);
-          container.addChild(ballNo5);
-          ballNo5.interactive = true;
-          ballNo5.buttonMode = true;
-          ballNo5.on('pointerdown',  onBallPointerDownNo5) // 押したとき
-                 .on('pointerup',   onBallPointerUpNo5); // 離したとき
-          function onBallPointerDownNo5() {
-            ballNo5.omajinai = true;
-            ballNo5.on('pointermove', moveBallNo5);
-          }
-          function onBallPointerUpNo5(){
-            ballNo5.omajinai = false;
-            ballNo5.on('pointermove', moveBallNo5);
-          }
-          function moveBallNo5(e) {
-            if(ballNo5.omajinai){
-              let position = e.data.getLocalPosition(app.stage);
-              ballNo5.x = position.x;
-              ballNo5.y = position.y;
-              delDivBallMes();
-              showDivBallMes2();
-              if(whichBoxNo5 == 0){
-                if(ballNo5.x > 90 & ballNo5.x < 310 & ballNo5.y > 440 & ballNo5.y < 610){
-                  delDivBallMes2();
-                }
-              }else{
-                if(ballNo5.x > 490 & ballNo5.x < 710 & ballNo5.y > 440 & ballNo5.y < 610){
-                  delDivBallMes2();
-                }
-              }  
-            }
+        // スイッチを押した回数/実験回数を管理
+        function switchCounter(sumSw,e){
+          if(sumSw < 4){
+            sumSw += 1;
+            showrestBall(sumSw); // 残り玉数
+            return sumSw;
+          }else if(sumSw == 4){
+            // 各種変数のリセット
+            sumSw = 0;
+            Rball = 0; // 赤玉が出た回数
+            Bball = 0; // 青玉
+            Yball = 0; // 黄玉
+            Wball = 0; // 白玉
+            showrestBall(5); // 残り玉数0を表示
+            showResultButtun(); // 結果を反映ボタンを表示
+            return sumSw;
           }
         }
-        sumSw = switchCounter(sumSw);
-      }
-      
-      // 玉を出す機械
-      const machine = new PIXI.Graphics(); // グラフィックオブジェクトの作成
-      //
-      machine.x = 100;          // 横座標の設定
-      machine.y = 100;          // 縦座標の設定
-      machine.beginFill(0xffffff);    // 指定の色で塗りつぶし開始準備
-      machine.drawRect(0,0,400,250);  // 矩形を描写する
-      machine.endFill();              // 塗りつぶしを完了する
-      app.stage.addChild(machine); // ステージに追加する
-      machine.interactive = true; // インタラクティブをTrueに
 
-      // 反映ボタンからスイッチへ表示を変更する関数
-      // 結果を反映ボタンを押したときを記述する関数
-      function showBallSwitch(){
-        contaResult.removeChildren();
+        // 当該玉が箱L,Rのどちらに属すべきか判断する関数
+        function ballJudge(Colorball){
+          if(Colorball == 1){
+            whichBox = 0; // 箱L
+            numberBoxL += 1; // 箱Lに入っている玉数+1
+            return whichBox;
+          }else if(Colorball != 1){
+            whichBox = 1; // 箱R
+            numberBoxR += 1; // 箱Rに入っている玉数+1
+            return whichBox;
+          }
+        }
+      
+        // 玉を追加する関数
+        function addBall(){
+          if(sumSw == 0){
+            showDivBallMes(); // 分類しよう!を表示
+            let ballNo1 = new PIXI.Graphics(); // ボールを一つ作成
+            let color = Math.floor(Math.random() * 4); // 0, 1, 2, 3の乱数で4色分け
+            switch(color){ // 色によって場合分け
+              case 0:
+                Wball += 1; // 白色が出た回数を+1
+                ballNo1.beginFill(0xffffff); // 白
+                ballNo1.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo1.endFill();
+                whichBoxNo1 = ballJudge(Wball); // この玉がL,Rのどちらの箱に入るべきかを判断
+                break;
+              case 1:
+                Rball += 1; // 赤色が出た回数を+1
+                ballNo1.beginFill(0xff0000); // 赤
+                ballNo1.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo1.endFill();
+                whichBoxNo1 = ballJudge(Rball);
+                break;
+              case 2:
+                Yball += 1; // 黄色が出た回数を+1
+                ballNo1.beginFill(0xffff00); // 黄
+                ballNo1.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo1.endFill();
+                whichBoxNo1 = ballJudge(Yball);
+                break;
+              case 3:
+                Bball += 1; // 青色が出た回数を+1
+                ballNo1.beginFill(0x00ffff); // 青
+                ballNo1.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo1.endFill();
+                whichBoxNo1 = ballJudge(Bball);
+                break;
+            }
+            ballNo1.x = ballexit.x + (ballexit.width/2); // ボールが出てくる場所
+            ballNo1.y = ballexit.y + (ballexit.height/2); // 同上
+            container.addChild(ballNo1); // ボール専用のコンテナに玉を追加
+            ballNo1.interactive = true; // アクティブに
+            ballNo1.buttonMode = true; // カーソルを重ねると矢印が手の形に変わる
+            // ドラッグ&ドロップの実装
+            ballNo1.on('pointerdown',  onBallPointerDownNo1) // 押したとき
+                  .on('pointerup',   onBallPointerUpNo1); // 離したとき
+            // 
+            function onBallPointerDownNo1() { // 押したとき用
+              ballNo1.omajinai = true;
+              ballNo1.on('pointermove', moveBallNo1);
+            }
+            function onBallPointerUpNo1(){ // 離したとき用
+              ballNo1.omajinai = false;
+              ballNo1.on('pointermove', moveBallNo1);
+            }
+            // ボールを動かす
+            function moveBallNo1(e) {
+              if(ballNo1.omajinai){ // 押しているときだけ
+                let position = e.data.getLocalPosition(app.stage); // カーソルの位置を玉の位置と連動
+                // 位置変更
+                ballNo1.x = position.x;
+                ballNo1.y = position.y;
+                delDivBallMes(); // 分類しよう!の文字を非表示に
+                showDivBallMes2(); // まだ分類ができてないよ!を表示
+                if(whichBoxNo1 == 0){ // 箱Lに入るべきときは
+                  if(ballNo1.x > 90 & ballNo1.x < 310 & ballNo1.y > 440 & ballNo1.y < 610){ // 箱Lの位置にあるなら
+                    delDivBallMes2(); // まだ分類できてないよ!を非表示
+                  }
+                }else{ // 箱Rに入るべきときは
+                  if(ballNo1.x > 490 & ballNo1.x < 710 & ballNo1.y > 440 & ballNo1.y < 610){ // 箱Rの位置にあるなら
+                    delDivBallMes2(); // まだ分類できてないよ!を非表示
+                  }
+                }  
+              }
+            }
+          // 以下2個目～5個目のボールに対して全く同じ実装を書いている
+          }else if(sumSw == 1){
+            showDivBallMes();
+            let ballNo2 = new PIXI.Graphics();
+            let color = Math.floor(Math.random() * 4); // 0, 1, 2, 3の乱数
+            switch(color){
+              case 0:
+                Wball += 1;
+                ballNo2.beginFill(0xffffff); // 白
+                ballNo2.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo2.endFill();
+                whichBoxNo2 = ballJudge(Wball);
+                break;
+              case 1:
+                Rball += 1;
+                ballNo2.beginFill(0xff0000); // 赤
+                ballNo2.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo2.endFill();
+                whichBoxNo2 = ballJudge(Rball);
+                break;
+              case 2:
+                Yball += 1;
+                ballNo2.beginFill(0xffff00); // 黄
+                ballNo2.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo2.endFill();
+                whichBoxNo2 = ballJudge(Yball);
+                break;
+              case 3:
+                Bball += 1;
+                ballNo2.beginFill(0x00ffff); // 青
+                ballNo2.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo2.endFill();
+                whichBoxNo2 = ballJudge(Bball);
+                break;
+            }
+            ballNo2.x = ballexit.x + (ballexit.width/2);
+            ballNo2.y = ballexit.y + (ballexit.height/2);
+            container.addChild(ballNo2);
+            ballNo2.interactive = true;
+            ballNo2.buttonMode = true;
+            ballNo2.on('pointerdown',  onBallPointerDownNo2) // 押したとき
+                  .on('pointerup',   onBallPointerUpNo2); // 離したとき
+            function onBallPointerDownNo2() {
+              ballNo2.omajinai = true;
+              ballNo2.on('pointermove', moveBallNo2);
+            }
+            function onBallPointerUpNo2(){
+              ballNo2.omajinai = false;
+              ballNo2.on('pointermove', moveBallNo2);
+            }
+            function moveBallNo2(e) {
+              if(ballNo2.omajinai){
+                let position = e.data.getLocalPosition(app.stage);
+                ballNo2.x = position.x;
+                ballNo2.y = position.y;
+                delDivBallMes();
+                showDivBallMes2();
+                if(whichBoxNo2 == 0){
+                  if(ballNo2.x > 90 & ballNo2.x < 310 & ballNo2.y > 440 & ballNo2.y < 610){
+                    delDivBallMes2();
+                  }
+                }else{
+                  if(ballNo2.x > 490 & ballNo2.x < 710 & ballNo2.y > 440 & ballNo2.y < 610){
+                    delDivBallMes2();
+                  }
+                }  
+              }
+            }
+          }else if(sumSw == 2){
+            showDivBallMes();
+            let ballNo3 = new PIXI.Graphics();
+            let color = Math.floor(Math.random() * 4); // 0, 1, 2, 3の乱数
+            switch(color){
+              case 0:
+                Wball += 1;
+                ballNo3.beginFill(0xffffff); // 白
+                ballNo3.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo3.endFill();
+                whichBoxNo3 = ballJudge(Wball);
+                break;
+              case 1:
+                Rball += 1;
+                ballNo3.beginFill(0xff0000); // 赤
+                ballNo3.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo3.endFill();
+                whichBoxNo3 = ballJudge(Rball);
+                break;
+              case 2:
+                Yball += 1;
+                ballNo3.beginFill(0xffff00); // 黄
+                ballNo3.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo3.endFill();
+                whichBoxNo3 = ballJudge(Yball);
+                break;
+              case 3:
+                Bball += 1;
+                ballNo3.beginFill(0x00ffff); // 青
+                ballNo3.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo3.endFill();
+                whichBoxNo3 = ballJudge(Bball);
+                break;
+            }
+            ballNo3.x = ballexit.x + (ballexit.width/2);
+            ballNo3.y = ballexit.y + (ballexit.height/2);
+            container.addChild(ballNo3);
+            ballNo3.interactive = true;
+            ballNo3.buttonMode = true;
+            ballNo3.on('pointerdown',  onBallPointerDownNo3) // 押したとき
+                  .on('pointerup',   onBallPointerUpNo3); // 離したとき
+            function onBallPointerDownNo3() {
+              ballNo3.omajinai = true;
+              ballNo3.on('pointermove', moveBallNo3);
+            }
+            function onBallPointerUpNo3(){
+              ballNo3.omajinai = false;
+              ballNo3.on('pointermove', moveBallNo3);
+            }
+            function moveBallNo3(e) {
+              if(ballNo3.omajinai){
+                let position = e.data.getLocalPosition(app.stage);
+                ballNo3.x = position.x;
+                ballNo3.y = position.y;
+                delDivBallMes();
+                showDivBallMes2();
+                if(whichBoxNo3 == 0){
+                  if(ballNo3.x > 90 & ballNo3.x < 310 & ballNo3.y > 440 & ballNo3.y < 610){
+                    delDivBallMes2();
+                  }
+                }else{
+                  if(ballNo3.x > 490 & ballNo3.x < 710 & ballNo3.y > 440 & ballNo3.y < 610){
+                    delDivBallMes2();
+                  }
+                }  
+              }
+            }
+          }else if(sumSw == 3){
+            showDivBallMes();
+            let ballNo4 = new PIXI.Graphics();
+            let color = Math.floor(Math.random() * 4); // 0, 1, 2, 3の乱数
+            switch(color){
+              case 0:
+                Wball += 1;
+                ballNo4.beginFill(0xffffff); // 白
+                ballNo4.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo4.endFill();
+                whichBoxNo4 = ballJudge(Wball);
+                break;
+              case 1:
+                Rball += 1;
+                ballNo4.beginFill(0xff0000); // 赤
+                ballNo4.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo4.endFill();
+                whichBoxNo4 = ballJudge(Rball);
+                break;
+              case 2:
+                Yball += 1;
+                ballNo4.beginFill(0xffff00); // 黄
+                ballNo4.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo4.endFill();
+                whichBoxNo4 = ballJudge(Yball);
+                break;
+              case 3:
+                Bball += 1;
+                ballNo4.beginFill(0x00ffff); // 青
+                ballNo4.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo4.endFill();
+                whichBoxNo4 = ballJudge(Bball);
+                break;
+            }
+            ballNo4.x = ballexit.x + (ballexit.width/2);
+            ballNo4.y = ballexit.y + (ballexit.height/2);
+            container.addChild(ballNo4);
+            ballNo4.interactive = true;
+            ballNo4.buttonMode = true;
+            ballNo4.on('pointerdown',  onBallPointerDownNo4) // 押したとき
+                  .on('pointerup',   onBallPointerUpNo4); // 離したとき
+            function onBallPointerDownNo4() {
+              ballNo4.omajinai = true;
+              ballNo4.on('pointermove', moveBallNo4);
+            }
+            function onBallPointerUpNo4(){
+              ballNo4.omajinai = false;
+              ballNo4.on('pointermove', moveBallNo4);
+            }
+            function moveBallNo4(e) {
+              if(ballNo4.omajinai){
+                let position = e.data.getLocalPosition(app.stage);
+                ballNo4.x = position.x;
+                ballNo4.y = position.y;
+                delDivBallMes();
+                showDivBallMes2();
+                if(whichBoxNo4 == 0){
+                  if(ballNo4.x > 90 & ballNo4.x < 310 & ballNo4.y > 440 & ballNo4.y < 610){
+                    delDivBallMes2();
+                  }
+                }else{
+                  if(ballNo4.x > 490 & ballNo4.x < 710 & ballNo4.y > 440 & ballNo4.y < 610){
+                    delDivBallMes2();
+                  }
+                }  
+              }
+            }
+          }else if(sumSw == 4){
+            showDivBallMes();
+            let ballNo5 = new PIXI.Graphics();
+            let color = Math.floor(Math.random() * 4); // 0, 1, 2, 3の乱数
+            switch(color){
+              case 0:
+                Wball += 1;
+                ballNo5.beginFill(0xffffff); // 白
+                ballNo5.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo5.endFill();
+                whichBoxNo5 = ballJudge(Wball);
+                break;
+              case 1:
+                Rball += 1;
+                ballNo5.beginFill(0xff0000); // 赤
+                ballNo5.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo5.endFill();
+                whichBoxNo5 = ballJudge(Rball);
+                break;
+              case 2:
+                Yball += 1;
+                ballNo5.beginFill(0xffff00); // 黄
+                ballNo5.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo5.endFill();
+                whichBoxNo5 = ballJudge(Yball);
+                break;
+              case 3:
+                Bball += 1;
+                ballNo5.beginFill(0x00ffff); // 青
+                ballNo5.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo5.endFill();
+                whichBoxNo5 = ballJudge(Bball);
+                break;
+            }
+            ballNo5.x = ballexit.x + (ballexit.width/2);
+            ballNo5.y = ballexit.y + (ballexit.height/2);
+            container.addChild(ballNo5);
+            ballNo5.interactive = true;
+            ballNo5.buttonMode = true;
+            ballNo5.on('pointerdown',  onBallPointerDownNo5) // 押したとき
+                  .on('pointerup',   onBallPointerUpNo5); // 離したとき
+            function onBallPointerDownNo5() {
+              ballNo5.omajinai = true;
+              ballNo5.on('pointermove', moveBallNo5);
+            }
+            function onBallPointerUpNo5(){
+              ballNo5.omajinai = false;
+              ballNo5.on('pointermove', moveBallNo5);
+            }
+            function moveBallNo5(e) {
+              if(ballNo5.omajinai){
+                let position = e.data.getLocalPosition(app.stage);
+                ballNo5.x = position.x;
+                ballNo5.y = position.y;
+                delDivBallMes();
+                showDivBallMes2();
+                if(whichBoxNo5 == 0){
+                  if(ballNo5.x > 90 & ballNo5.x < 310 & ballNo5.y > 440 & ballNo5.y < 610){
+                    delDivBallMes2();
+                  }
+                }else{
+                  if(ballNo5.x > 490 & ballNo5.x < 710 & ballNo5.y > 440 & ballNo5.y < 610){
+                    delDivBallMes2();
+                  }
+                }  
+              }
+            }
+          }
+          sumSw = switchCounter(sumSw);
+        }
+        
+        // 玉を出す機械
+        const machine = new PIXI.Graphics(); // グラフィックオブジェクトの作成
+        //
+        machine.x = 100;          // 横座標の設定
+        machine.y = 100;          // 縦座標の設定
+        machine.beginFill(0xffffff);    // 指定の色で塗りつぶし開始準備
+        machine.drawRect(0,0,400,250);  // 矩形を描写する
+        machine.endFill();              // 塗りつぶしを完了する
+        app.stage.addChild(machine); // ステージに追加する
+        machine.interactive = true; // インタラクティブをTrueに
+
+        // 反映ボタンからスイッチへ表示を変更する関数
+        // 結果を反映ボタンを押したときを記述する関数
+        function showBallSwitch(){
+          contaResult.removeChildren();
+          const ballswitch = new PIXI.Graphics(); // グラフィックオブジェクトの作成
+          ballswitch.x = 120;
+          ballswitch.y = 120;
+          ballswitch.beginFill(0x333333);
+          ballswitch.drawRect(0,0,150,150);
+          ballswitch.endFill();
+          contaSwitch.addChild(ballswitch);
+          ballswitch.interactive = true;
+          ballswitch.on("pointertap", addBall); // クリックしたら玉が表れる
+
+          // 文字(push)を表示
+          const Push = new PIXI.Text("Push");
+          Push.x = ballswitch.x + (ballswitch.width/2) -30;
+          Push.y = ballswitch.y + (ballswitch.height/2) -15;
+          Push.style.fill = "white";
+          contaSwitch.addChild(Push);
+
+          showrestBall(0); // 残り玉数を「5個」に戻す
+          container.removeChildren(); // 5個の玉を消す
+          sumEx = showsumEx(sumEx); // 実験回数を表示・積算
+          sumPh = showsumPh(numberBoxL,sumPh); // 当該事象の起こった回数を表示・積算
+          showProbability(sumEx,sumPh); // 確率を表示
+          numberBoxL = 0; // 左の箱の玉の数を初期化
+          numberBoxR = 0; // 
+        }
+
+        // スイッチを消して結果を反映ボタンを表示する関数
+        function showResultButtun(){
+          contaSwitch.removeChildren();
+          const showResult = new PIXI.Graphics(); // グラフィックオブジェクトの作成
+          //
+          showResult.x = 120;
+          showResult.y = 120;
+          showResult.beginFill(0x333333);
+          showResult.drawRect(0,0,150,150);
+          showResult.endFill();
+          contaResult.addChild(showResult);
+          showResult.interactive = true;
+          //showResult.on("pointertap", addBall); // クリックしたら玉が表れる
+          showResult.on("pointertap", showBallSwitch); // クリックしたら再度Pushボタンが表示
+
+          // 文字(結果を反映)を表示
+          const reflectResult = new PIXI.Text("結果を反映");
+          reflectResult.x = ballswitch.x + (ballswitch.width/2) -65;
+          reflectResult.y = ballswitch.y + (ballswitch.height/2) -40;
+          reflectResult.style.fill = "white";
+          contaResult.addChild(reflectResult);
+
+          // 文字(実験を続ける)を表示
+          const reflectResult2 = new PIXI.Text("(実験続行)");
+          reflectResult2.x = ballswitch.x + (ballswitch.width/2) -60;
+          reflectResult2.y = ballswitch.y + (ballswitch.height/2) +10;
+          reflectResult2.style.fill = "white";
+          contaResult.addChild(reflectResult2);
+        }
+
+        // 実測値を表示するための関数
+        function showProbability(sumEx,sumPh){
+          contaProbability.removeChildren();
+          
+          // 分母を表示
+          const Bunbo = new PIXI.Text(sumEx);
+          Bunbo.x = 560;
+          Bunbo.y = 210;
+          Bunbo.style.fill = "yellow";
+          Bunbo.width *= 1.7;
+          Bunbo.height *= 1.7;
+          contaProbability.addChild(Bunbo);
+
+          // 分子を表示
+          const Bunshi = new PIXI.Text(sumPh);
+          Bunshi.x = 560;
+          Bunshi.y = 140;
+          Bunshi.style.fill = "yellow";
+          Bunshi.width *= 1.7;
+          Bunshi.height *= 1.7;
+          contaProbability.addChild(Bunshi);
+
+          // 小数で表示
+          const prob = new PIXI.Text(Math.round((sumPh/sumEx)*100)/100); // 小数点第2位で四捨五入
+          prob.x = BunsuEqual.x + 40;
+          prob.y = BunsuEqual.y - 12;
+          prob.style.fill = 0xff9999;
+          prob.width *= 1.7;
+          prob.height *= 1.7;
+          contaProbability.addChild(prob);
+        }
+
+        // スイッチ初期表示
         const ballswitch = new PIXI.Graphics(); // グラフィックオブジェクトの作成
+        //
         ballswitch.x = 120;
         ballswitch.y = 120;
         ballswitch.beginFill(0x333333);
         ballswitch.drawRect(0,0,150,150);
         ballswitch.endFill();
-        contaSwitch.addChild(ballswitch);
+        app.stage.addChild(ballswitch);
         ballswitch.interactive = true;
         ballswitch.on("pointertap", addBall); // クリックしたら玉が表れる
+        
+        // ボール取り出し口1
+        const ballexit = new PIXI.Graphics(); // グラフィックオブジェクトの作成
+        //
+        ballexit.x = 320;
+        ballexit.y = 270;
+        ballexit.beginFill(0x333333);
+        ballexit.drawRect(0,0,160,80);
+        ballexit.endFill();
+        app.stage.addChild(ballexit);
+        ballexit.interactive = true;
+
+        // ボール取り出し口2
+        const ballexit2 = new PIXI.Graphics(); // グラフィックオブジェクトの作成
+        //
+        ballexit2.beginFill(0x333333);
+        ballexit2.drawCircle(ballexit.x + (ballexit.width/2),ballexit.y,(ballexit.width/2)); // (中心x,中心y,半径)
+        ballexit2.endFill();
+        app.stage.addChild(ballexit2);
+        ballexit2.interactive = true;
 
         // 文字(push)を表示
         const Push = new PIXI.Text("Push");
         Push.x = ballswitch.x + (ballswitch.width/2) -30;
         Push.y = ballswitch.y + (ballswitch.height/2) -15;
         Push.style.fill = "white";
-        contaSwitch.addChild(Push);
+        app.stage.addChild(Push);
 
-        showrestBall(0); // 残り玉数を「5個」に戻す
-        container.removeChildren(); // 5個の玉を消す
-        sumEx = showsumEx(sumEx); // 実験回数を表示・積算
-        sumPh = showsumPh(numberBoxL,sumPh); // 当該事象の起こった回数を表示・積算
-        numberBoxL = 0; // 左の箱の玉の数を初期化
-        numberBoxR = 0; // 
-      }
+        // 残り玉数を表示
+        const restBall = new PIXI.Text("残り　   　球");
+        restBall.x = ballexit.x;
+        restBall.y = ballswitch.y;
+        restBall.style.fill = "black";
+        app.stage.addChild(restBall);
 
-      // スイッチを消して結果を反映ボタンを表示する関数
-      function showResultButtun(){
-        contaSwitch.removeChildren();
-        const showResult = new PIXI.Graphics(); // グラフィックオブジェクトの作成
-        //
-        showResult.x = 120;
-        showResult.y = 120;
-        showResult.beginFill(0x333333);
-        showResult.drawRect(0,0,150,150);
-        showResult.endFill();
-        contaResult.addChild(showResult);
-        showResult.interactive = true;
-        //showResult.on("pointertap", addBall); // クリックしたら玉が表れる
-        showResult.on("pointertap", showBallSwitch); // クリックしたら再度Pushボタンが表示
+        // 最初の残り玉数を表示
+        const meresBaFirst = new PIXI.Text(5); // 新しい数字を表示
+        meresBaFirst.x = restBall.x + 75;
+        meresBaFirst.y = restBall.y;
+        meresBaFirst.style.fill = "red";
+        app.stage.addChild(meresBaFirst);
 
-        // 文字(結果を反映)を表示
-        const reflectResult = new PIXI.Text("結果を反映");
-        reflectResult.x = ballswitch.x + (ballswitch.width/2) -65;
-        reflectResult.y = ballswitch.y + (ballswitch.height/2) -40;
-        reflectResult.style.fill = "white";
-        contaResult.addChild(reflectResult);
+        // containerの作成(ボール専用)
+        const container = new PIXI.Container();
+        app.stage.addChild(container);
 
-        // 文字(実験を続ける)を表示
-        const reflectResult2 = new PIXI.Text("(実験続行)");
-        reflectResult2.x = ballswitch.x + (ballswitch.width/2) -60;
-        reflectResult2.y = ballswitch.y + (ballswitch.height/2) +10;
-        reflectResult2.style.fill = "white";
-        contaResult.addChild(reflectResult2);
-      }
+        // containerの作成(玉の分類メッセージ専用)
+        const contaDivball = new PIXI.Container();
+        app.stage.addChild(contaDivball);
 
+        // containerの作成(玉の分類メッセージ専用2)
+        const contaDivball2 = new PIXI.Container();
+        app.stage.addChild(contaDivball2);
 
-      // スイッチ初期表示
-      const ballswitch = new PIXI.Graphics(); // グラフィックオブジェクトの作成
-      //
-      ballswitch.x = 120;
-      ballswitch.y = 120;
-      ballswitch.beginFill(0x333333);
-      ballswitch.drawRect(0,0,150,150);
-      ballswitch.endFill();
-      app.stage.addChild(ballswitch);
-      ballswitch.interactive = true;
-      ballswitch.on("pointertap", addBall); // クリックしたら玉が表れる
-      
-      // ボール取り出し口1
-      const ballexit = new PIXI.Graphics(); // グラフィックオブジェクトの作成
-      //
-      ballexit.x = 320;
-      ballexit.y = 270;
-      ballexit.beginFill(0x333333);
-      ballexit.drawRect(0,0,160,80);
-      ballexit.endFill();
-      app.stage.addChild(ballexit);
-      ballexit.interactive = true;
+        // containerの作成(実験結果と確率専用)
+        const contaProbability = new PIXI.Container();
+        app.stage.addChild(contaProbability);
 
-      // ボール取り出し口2
-      const ballexit2 = new PIXI.Graphics(); // グラフィックオブジェクトの作成
-      //
-      ballexit2.beginFill(0x333333);
-      ballexit2.drawCircle(ballexit.x + (ballexit.width/2),ballexit.y,(ballexit.width/2)); // (中心x,中心y,半径)
-      ballexit2.endFill();
-      app.stage.addChild(ballexit2);
-      ballexit2.interactive = true;
+        // containerの作成(残り玉数専用)
+        const contaRestBall = new PIXI.Container();
+        app.stage.addChild(contaRestBall);
+        
+        //  containerの作成(結果を反映ボタン専用)
+        const contaResult = new PIXI.Container();
+        app.stage.addChild(contaResult);
 
-      // 文字(push)を表示
-      const Push = new PIXI.Text("Push");
-      Push.x = ballswitch.x + (ballswitch.width/2) -30;
-      Push.y = ballswitch.y + (ballswitch.height/2) -15;
-      Push.style.fill = "white";
-      app.stage.addChild(Push);
+        //  containerの作成(スイッチ専用)
+        const contaSwitch = new PIXI.Container();
+        app.stage.addChild(contaSwitch);
 
-      // 残り玉数を表示
-      const restBall = new PIXI.Text("残り　   　球");
-      restBall.x = ballexit.x;
-      restBall.y = ballswitch.y;
-      restBall.style.fill = "black";
-      app.stage.addChild(restBall);
-
-      // 最初の残り玉数を表示
-      const meresBaFirst = new PIXI.Text(5); // 新しい数字を表示
-      meresBaFirst.x = restBall.x + 75;
-      meresBaFirst.y = restBall.y;
-      meresBaFirst.style.fill = "red";
-      app.stage.addChild(meresBaFirst);
-
-      // containerの作成(ボール専用)
-      const container = new PIXI.Container();
-      app.stage.addChild(container);
-
-      // containerの作成(玉の分類メッセージ専用)
-      const contaDivball = new PIXI.Container();
-      app.stage.addChild(contaDivball);
-
-      // containerの作成(玉の分類メッセージ専用2)
-      const contaDivball2 = new PIXI.Container();
-      app.stage.addChild(contaDivball2);
-
-      // containerの作成(実験結果と確率専用)
-      const contaProbability = new PIXI.Container();
-      app.stage.addChild(contaProbability);
-
-      // containerの作成(残り玉数専用)
-      const contaRestBall = new PIXI.Container();
-      app.stage.addChild(contaRestBall);
-      
-      //  containerの作成(結果を反映ボタン専用)
-      const contaResult = new PIXI.Container();
-      app.stage.addChild(contaResult);
-
-      //  containerの作成(スイッチ専用)
-      const contaSwitch = new PIXI.Container();
-      app.stage.addChild(contaSwitch);
-
-    </script>
+      </script>
+    </div>
   </body>
 
 </html>
