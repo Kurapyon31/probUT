@@ -24,11 +24,11 @@ body{
 }
 
 .abst{
+  width: 780px;
   height: 25px;
   background-color: lightsteelblue;
   font-size: 20px;
-  padding: 4px 10px;
-  float: left;
+  padding:5px 10px;
 }
 
 li{
