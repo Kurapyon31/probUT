@@ -1,6 +1,5 @@
 body{
     margin:0;
-    padding:0;
     position:relative;
   }
 .btn{
@@ -8,3 +7,30 @@ body{
     top:10px;
     left:10px;
   }
+.header{
+  width: 780px;
+  background-color: lightslategrey;
+  height: 40px;
+  font-size: 30px;
+  font-family: fantasy;
+  color: aliceblue;
+  padding: 5px 10px;
+}
+
+.hardness{
+  width: 780px;
+  background-color: aliceblue;
+  padding: 5px 10px;
+}
+
+.abst{
+  height: 25px;
+  background-color: lightsteelblue;
+  font-size: 20px;
+  padding: 4px 10px;
+  float: left;
+}
+
+li{
+  list-style: none;
+}
