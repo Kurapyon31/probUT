@@ -11,26 +11,37 @@
       }
     </style>
     <script src="https://pixijs.download/release/pixi.js"></script>
-    <link rel="stylesheet" href="https://Kurapyon31.github.io/probUT/practice.css">
+    <link rel="stylesheet" href="practice.css">
   </head>
 
   <body>
     <div class="header">
-      Challenge the University of Tokyo entrance exam!
+      <h1>挑め! 東大入試!</h1>
     </div>
     <div class="abst">
-      本当に求めた通りの確率になるのか!? 実験をして調べよう!
+      <h2>本当に求めた通りの<span>確率</span>になるのかな!? 実験で調べよう!</h2>
     </div>
     <div class="hardness">
       <ul>
-        <li>　難易度(~中学生): ★★★☆☆</li>
-        <li>　難易度(高校生~): ★☆☆☆☆</li>
+        <li>　難易度(~中学生): ★★★☆☆ 標準</li>
+        <li>　難易度(高校生~): ★☆☆☆☆ 易</li>
       </ul>
     </div>
-    <div class="question">
-      
+    <div class="howtoplay">
+      <h2>楽しみ方</h2>
+      <p>この作品は，東京大学の入学試験で出題された確率の問題で遊びます!</p>
+      <img src="howToplay_1.png" width=780px>
+      <p>まずは<span>問題</span>を読んで，問題の設定と条件を確認してください. </p>
+      <p>次の<span>実験</span>パートでは，その設定と条件のもとで実験をすることができます. </p>
+      <p>実験の結果から求められる確率(実測値)は，数学を使って求められる確率(理論値)と同じでしょうか!?</p>
+      <p></p>
     </div>
-    <div class="main">
+    <div class="question">
+      <h2>問題</h2>
+      <img src="instract_1.png" width=780px>
+    </div>
+    <div class="experiment">
+      <h2>実験</h2>
       <script>
         // 「padding: 値;」とすると、上下左右すべての方向にその大きさの余白が追加されます
         // 「padding-top: 値;」などとすると、その方向のみに余白が追加されます
@@ -64,11 +75,11 @@
           backgroundColor: 0x556b2f, // 背景色
           view: document.querySelector('canvas'),
         });
-        
+  
         // スクロールできるようにする
         app.renderer.plugins.interaction.autoPreventDefault = false;
         app.renderer.view.style.touchAction = 'auto';
-        
+
         // bodyにpixi.jsのview(ステージ)を追加する
         document.body.appendChild(app.view);
 
@@ -389,7 +400,7 @@
                 break;
               case 3:
                 Bball += 1; // 青色が出た回数を+1
-                ballNo1.beginFill(0x00ffff); // 青
+                ballNo1.beginFill(0x00bfff); // 青
                 ballNo1.drawCircle(0,0,40); // (中心x,中心y,半径)
                 ballNo1.endFill();
                 whichBoxNo1 = ballJudge(Bball);
@@ -405,14 +416,14 @@
                   .on('pointerup',   onBallPointerUpNo1); // 離したとき
             // 
             function onBallPointerDownNo1() { // 押したとき用
-              app.renderer.plugins.interaction.autoPreventDefault = true;
+              //app.renderer.plugins.interaction.autoPreventDefault = true;
               //app.renderer.view.style.touchAction = 'auto';
               ballNo1.omajinai = true;
               ballNo1.on('pointermove', moveBallNo1);
             }
             function onBallPointerUpNo1(){ // 離したとき用
-              app.renderer.plugins.interaction.autoPreventDefault = false;
-              app.renderer.view.style.touchAction = 'auto';
+              //app.renderer.plugins.interaction.autoPreventDefault = false;
+              //app.renderer.view.style.touchAction = 'auto';
               ballNo1.omajinai = false;
               ballNo1.on('pointermove', moveBallNo1);
             }
@@ -465,7 +476,7 @@
                 break;
               case 3:
                 Bball += 1;
-                ballNo2.beginFill(0x00ffff); // 青
+                ballNo2.beginFill(0x00bfff); // 青
                 ballNo2.drawCircle(0,0,40); // (中心x,中心y,半径)
                 ballNo2.endFill();
                 whichBoxNo2 = ballJudge(Bball);
@@ -532,7 +543,7 @@
                 break;
               case 3:
                 Bball += 1;
-                ballNo3.beginFill(0x00ffff); // 青
+                ballNo3.beginFill(0x00bfff); // 青
                 ballNo3.drawCircle(0,0,40); // (中心x,中心y,半径)
                 ballNo3.endFill();
                 whichBoxNo3 = ballJudge(Bball);
@@ -599,7 +610,7 @@
                 break;
               case 3:
                 Bball += 1;
-                ballNo4.beginFill(0x00ffff); // 青
+                ballNo4.beginFill(0x00bfff); // 青
                 ballNo4.drawCircle(0,0,40); // (中心x,中心y,半径)
                 ballNo4.endFill();
                 whichBoxNo4 = ballJudge(Bball);
@@ -666,7 +677,7 @@
                 break;
               case 3:
                 Bball += 1;
-                ballNo5.beginFill(0x00ffff); // 青
+                ballNo5.beginFill(0x00bfff); // 青
                 ballNo5.drawCircle(0,0,40); // (中心x,中心y,半径)
                 ballNo5.endFill();
                 whichBoxNo5 = ballJudge(Bball);
