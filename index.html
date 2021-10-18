@@ -62,8 +62,13 @@
           width: width,
           height: height,
           backgroundColor: 0x556b2f, // 背景色
+          view: document.querySelector('canvas'),
         });
-  
+        
+        // スクロールできるようにする
+        app.renderer.plugins.interaction.autoPreventDefault = false;
+        app.renderer.view.style.touchAction = 'auto';
+        
         // bodyにpixi.jsのview(ステージ)を追加する
         document.body.appendChild(app.view);
 
