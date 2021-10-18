@@ -11,7 +11,6 @@ body{
   width: 780px;
   background-color: lightslategrey;
   height: 40px;
-  font-size: 30px;
   font-family: fantasy;
   color: aliceblue;
   padding: 5px 10px;
@@ -21,13 +20,37 @@ body{
   width: 780px;
   background-color: aliceblue;
   padding: 5px 10px;
+  border-bottom: 5px solid lightslategrey;
 }
 
 .abst{
   width: 780px;
-  height: 25px;
+  height: 30px;
   background-color: lightsteelblue;
-  font-size: 20px;
+  padding:5px 10px;
+}
+
+.abst span{
+  font-weight: bolder;
+}
+
+.howtoplay{
+  width: 780px;
+  padding:5px 10px;
+  border-bottom: 5px solid lightsteelblue;
+}
+
+.howtoplay span{
+  font-weight: bolder; 
+}
+
+.question{
+  width: 780px;
+  padding:5px 10px;
+}
+
+.experiment{
+  width: 780px;
   padding:5px 10px;
 }
 
