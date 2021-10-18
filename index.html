@@ -405,10 +405,14 @@
                   .on('pointerup',   onBallPointerUpNo1); // 離したとき
             // 
             function onBallPointerDownNo1() { // 押したとき用
+              app.renderer.plugins.interaction.autoPreventDefault = true;
+              //app.renderer.view.style.touchAction = 'auto';
               ballNo1.omajinai = true;
               ballNo1.on('pointermove', moveBallNo1);
             }
             function onBallPointerUpNo1(){ // 離したとき用
+              app.renderer.plugins.interaction.autoPreventDefault = false;
+              app.renderer.view.style.touchAction = 'auto';
               ballNo1.omajinai = false;
               ballNo1.on('pointermove', moveBallNo1);
             }
