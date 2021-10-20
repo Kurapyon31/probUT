@@ -34,11 +34,15 @@
       <img src="howToplay_13.png" width=780px>
       <p>まずは<span id="subtitle">問題</span>を読んで，問題の設定と条件を確認してください. </p>
       <p><span id="subtitle">実験</span>パートでは，その設定と条件のもとで実験をすることができます. </p>
-      <p><strong class="marker_line">実験値と理論値は同じになるでしょうか!?</strong>何度も実験して，結果を見比べてみてください！</p>
+      <p><span id="subtitle">実験値と理論値は同じになるでしょうか!?</span>　何度も実験して，結果を見比べよう！</p>
     </div>
     <div class="question">
       <h2>問題</h2>
+      <p>①空っぽの箱を2つ用意して [L] [R] とそれぞれ名前をつけます．</p>
+      <p>②[Push]ボタンを押すと，赤･青･黄･白のいずれかの色のボールが同じ確率で出てくる機械があります.</p>
       <img src="instract_1.png" width=780px>
+      <p>③出てきたボールと<strong>同じ色のボールが箱Lにあったとき</strong>は，出てきたボールは<strong>箱L</strong>に入れて，</p>
+      <p>　出てきたボールと<strong>同じ色のボールが箱Lにないとき</strong>は，出てきたボールは<strong>箱R</strong>に入れます．</p>
     </div>
     <div class="experiment">
       <h2>実験</h2>
@@ -257,6 +261,13 @@
           leftBox.interactive = true;　// インタラクティブをTrueに
           //leftBox.on("pointertap", changecolor); // 色変換
 
+          // 箱Lふた
+          const BoxLcover = new PIXI.Graphics();
+          BoxLcover.lineStyle(10,0xe6cf8a).moveTo(leftBoxEdge.x,leftBoxEdge.y).lineTo(leftBoxEdge.x-30,leftBoxEdge.y+170);
+          BoxLcover.lineStyle(10,0xe6cf8a).moveTo(leftBoxEdge.x+leftBoxEdge.width,leftBoxEdge.y).lineTo(leftBoxEdge.x+leftBoxEdge.width+30,leftBoxEdge.y+170);
+          BoxLcover.lineStyle(20,0x556b2f).moveTo(leftBoxEdge.x+10,leftBoxEdge.y).lineTo(leftBoxEdge.x+leftBoxEdge.width-10,leftBoxEdge.y);
+          app.stage.addChild(BoxLcover);
+
           // 箱Rの枠
           const rightBoxEdge = new PIXI.Graphics(); // グラフィックオブジェクトの作成
           //
@@ -277,6 +288,13 @@
           rightBox.endFill();              // 塗りつぶしを完了する
           app.stage.addChild(rightBox); // ステージに追加する
           rightBox.interactive = true;　// インタラクティブをTrueに
+
+          // 箱Rふた
+          const BoxRcover = new PIXI.Graphics();
+          BoxRcover.lineStyle(10,0xe6cf8a).moveTo(rightBoxEdge.x,rightBoxEdge.y).lineTo(rightBoxEdge.x-30,rightBoxEdge.y+170);
+          BoxRcover.lineStyle(10,0xe6cf8a).moveTo(rightBoxEdge.x+rightBoxEdge.width,rightBoxEdge.y).lineTo(rightBoxEdge.x+rightBoxEdge.width+30,rightBoxEdge.y+170);
+          BoxRcover.lineStyle(20,0x556b2f).moveTo(rightBoxEdge.x+10,rightBoxEdge.y).lineTo(rightBoxEdge.x+rightBoxEdge.width-10,rightBoxEdge.y);
+          app.stage.addChild(BoxRcover);
 
           // 文字(箱L)を表示
           const nameL = new PIXI.Text("L");
