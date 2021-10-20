@@ -21,6 +21,12 @@ body{
   background-color: aliceblue;
   padding: 5px 10px;
   border-bottom: 5px solid lightslategrey;
+  font-family: sans-serif;
+}
+
+.hardness span{
+  font-weight: bolder;
+  color: steelblue;
 }
 
 .abst{
@@ -40,8 +46,17 @@ body{
   border-bottom: 5px solid lightsteelblue;
 }
 
-.howtoplay span{
+.howtoplay span#subtitle{
   font-weight: bolder; 
+}
+
+.howtoplay span#fromUT{
+  font-weight: bolder;
+  color: steelblue;
+}
+
+.marker_line{
+  background: linear-gradient(transparent 60%, lightsteelblue 0%); 
 }
 
 .question{
