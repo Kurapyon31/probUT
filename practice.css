@@ -62,6 +62,8 @@ body{
 .question{
   width: 780px;
   padding:5px 10px;
+  background-color: aliceblue;
+  border-bottom: 5px solid lightslategrey;
 }
 
 .experiment{
