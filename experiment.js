@@ -359,12 +359,41 @@
           probTranslate.addChild(testTitle);
 
           // グラフ軸
-          const graphBack = new PIXI.Sprite.from('probGraph.png');
+          //const graphBack = new PIXI.Sprite.from('probGraph.png'); // どっちにする?
+          const graphBack = new PIXI.Sprite.from('probGraph_2.png'); // どっちにする?
           graphBack.x = 0;
           graphBack.y = testPic.y + testPic.height + 5;
           graphBack.width = 800;
           graphBack.height = 500;
           probTranslate.addChild(graphBack);
+
+          const zahogime_first = new PIXI.Graphics();
+          zahogime_first.x = 30;
+          zahogime_first.y = 600;
+          zahogime_first.beginFill(0xff9999);
+          zahogime_first.drawRect(0,0,10,10);
+          zahogime_first.endFill();
+          probTranslate.addChild(zahogime_first);
+
+          const conectPlot_first = new PIXI.Graphics();
+          conectPlot_first.lineStyle(3,0xff9999).moveTo(30 + 5,600 + 5).lineTo(30 + 15 + 5,600 - 415*probTrans[0] + 5);
+          probTranslate.addChild(conectPlot_first);
+
+          for(i=0;i<probTrans.length;i++){ // 格納されている確率の個数分プロット
+            const zahogime = new PIXI.Graphics();
+            zahogime.x = 30 + 15*(i+1);
+            zahogime.y = 600 - 415*probTrans[i];
+            zahogime.beginFill(0xff9999);
+            zahogime.drawRect(0,0,10,10);
+            zahogime.endFill();
+            probTranslate.addChild(zahogime);
+
+            const conectPlot = new PIXI.Graphics();
+            conectPlot.lineStyle(3,0xff9999).moveTo(30 + 15*i + 5,600 - 415*probTrans[i-1] + 5).lineTo(30 + 15*(i+1) + 5,600 - 415*probTrans[i] + 5);
+            probTranslate.addChild(conectPlot);
+          }
+
+
 
           // 実験に戻る(確率変遷を消す)
           function BackToExperiment(){
