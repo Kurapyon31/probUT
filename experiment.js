@@ -3,6 +3,7 @@
         // padding は border の内側の余白、margin は border の外側の余白
         //<button class="btn">リセット</button> がhead に入っていた元は 
 
+
         var probTrans = []; // 確率を格納
 
         let sumEx = 0; // 実験の合計回数
@@ -18,7 +19,9 @@
         let numberBoxR = 0; // 右の箱に入っているボールの数
 
         let whichBox = 0; // 0ならば箱L
+        const ballrad = 40; // ボールの半径
 
+        const move_BoxAndPush = 50; // 機械と箱の初期位置をどれだけ上にずらすか(アレンジ用)
 
         // pixi.jsのアプリケーションを作成
         const width = 800;
@@ -154,6 +157,7 @@
         
         // 残り玉数を表示
         function showrestBall(sumSw,e){
+          
           const resBacover = new PIXI.Graphics(); // その前の数字を塗りつぶし
           resBacover.x = restBall.x + 75;
           resBacover.y = restBall.y;
@@ -176,9 +180,10 @@
           const leftBoxEdge = new PIXI.Graphics(); // グラフィックオブジェクトの作成
           //
           leftBoxEdge.x = 40;          // 横座標の設定
-          leftBoxEdge.y = 390;          // 縦座標の設定
+          leftBoxEdge.y = 390 - move_BoxAndPush;          // 縦座標の設定
           leftBoxEdge.beginFill(0xe6cf8a);    // 指定の色で塗りつぶし開始準備
-          leftBoxEdge.drawRect(0,0,320,270);  // 矩形を描写する
+          //leftBoxEdge.drawRect(0,0,320,270);  // 矩形を描写する
+          leftBoxEdge.drawRect(0,0,320,180);  // 矩形を描写する★
           leftBoxEdge.endFill();              // 塗りつぶしを完了する
           app.stage.addChild(leftBoxEdge); // ステージに追加する
 
@@ -205,9 +210,10 @@
           const rightBoxEdge = new PIXI.Graphics(); // グラフィックオブジェクトの作成
           //
           rightBoxEdge.x = 440;          // 横座標の設定
-          rightBoxEdge.y = 390;          // 縦座標の設定
+          rightBoxEdge.y = 390 - move_BoxAndPush;          // 縦座標の設定
           rightBoxEdge.beginFill(0xe6cf8a);    // 指定の色で塗りつぶし開始準備
-          rightBoxEdge.drawRect(0,0,320,270);  // 矩形を描写する
+          //rightBoxEdge.drawRect(0,0,320,270);  // 矩形を描写する
+          rightBoxEdge.drawRect(0,0,320,180);  // 矩形を描写する★
           rightBoxEdge.endFill();              // 塗りつぶしを完了する
           app.stage.addChild(rightBoxEdge); // ステージに追加する
 
@@ -232,14 +238,14 @@
           // 文字(箱L)を表示
           const nameL = new PIXI.Text("L");
           nameL.x = 60;
-          nameL.y = 400;
+          nameL.y = 400 - move_BoxAndPush;
           nameL.style.fill = "white";
           app.stage.addChild(nameL);
 
           // 文字(箱R)を表示
           const nameR = new PIXI.Text("R");
           nameR.x = 460;
-          nameR.y = 400;
+          nameR.y = 400 - move_BoxAndPush;
           nameR.style.fill = "white";
           app.stage.addChild(nameR);
         }
@@ -250,7 +256,7 @@
         function showDivBallMes(){
           const mesDivball = new PIXI.Text("条件に従ってLまたはRの箱に玉を入れよう！");
           mesDivball.x = 120;
-          mesDivball.y = 700;
+          mesDivball.y = 550;
           mesDivball.style.fill = "white";
           contaDivball.addChild(mesDivball);
         }
@@ -262,25 +268,25 @@
         function showDivBallMes2(){
           const mesDivball2 = new PIXI.Text("まだ箱に入ってない");
           mesDivball2.x = 50;
-          mesDivball2.y = 700;
+          mesDivball2.y = 550;
           mesDivball2.style.fill = "yellow";
           contaDivball2.addChild(mesDivball2);
 
           const mesDivball3 = new PIXI.Text("または");
           mesDivball3.x = 300;
-          mesDivball3.y = 700;
+          mesDivball3.y = 550;
           mesDivball3.style.fill = "white";
           contaDivball2.addChild(mesDivball3);
 
           const mesDivball4 = new PIXI.Text("箱が間違っている");
           mesDivball4.x = 400;
-          mesDivball4.y = 700;
+          mesDivball4.y = 550;
           mesDivball4.style.fill = "yellow";
           contaDivball2.addChild(mesDivball4);
 
           const mesDivball5 = new PIXI.Text("状態だよ!");
           mesDivball5.x = 630;
-          mesDivball5.y = 700;
+          mesDivball5.y = 550;
           mesDivball5.style.fill = "white";
           contaDivball2.addChild(mesDivball5);
         }
@@ -324,6 +330,7 @@
         ////////////////////////////////
         // 理論値と比較を押したときに起こる関数
         function showProb(){
+
           // containerの作成(確率変遷専用)
           const probTranslate = new PIXI.Container();
           app.stage.addChild(probTranslate);
@@ -335,9 +342,6 @@
           probTransBack.drawRect(0,0,800,800);  // 矩形を描写する
           probTransBack.endFill();              // 塗りつぶしを完了する
           probTranslate.addChild(probTransBack); // ステージに追加する
-          //probTransBack.interactive = true; // アクティブに
-          //probTransBack.buttonMode = true; // カーソルを重ねると矢印が手の形に変わる
-          //probTransBack.on("pointertap", BackToExperiment); // クリックしたら実験に戻る
 
           // 戻るボタン
           const testPic = new PIXI.Sprite.from('experiment_backToEx.png');
@@ -359,7 +363,6 @@
           probTranslate.addChild(testTitle);
 
           // グラフ軸
-          //const graphBack = new PIXI.Sprite.from('probGraph.png'); // どっちにする?
           const graphBack = new PIXI.Sprite.from('probGraph_2.png'); // どっちにする?
           graphBack.x = 0;
           graphBack.y = testPic.y + testPic.height + 5;
@@ -367,33 +370,76 @@
           graphBack.height = 500;
           probTranslate.addChild(graphBack);
 
+          // 実験回数33回ごとにプロットの縮尺を変える
+          const plotsize = Math.ceil(probTrans.length/33);
+
+          // 実験回数0回目は確率0
           const zahogime_first = new PIXI.Graphics();
           zahogime_first.x = 30;
           zahogime_first.y = 600;
           zahogime_first.beginFill(0xff9999);
-          zahogime_first.drawRect(0,0,10,10);
+          zahogime_first.drawRect(0,0,(10/plotsize),(10/plotsize));
           zahogime_first.endFill();
           probTranslate.addChild(zahogime_first);
 
+          // 実験回数軸までの線
+          const conectPlot_last = new PIXI.Graphics();
+          conectPlot_last.lineStyle(2,0xffffff).moveTo(30 + (15/plotsize)*(probTrans.length) + (5/plotsize),600 - 415*probTrans[(probTrans.length)-1] + (5/plotsize)).lineTo(30 + (15/plotsize)*(probTrans.length) + (5/plotsize),600);
+          probTranslate.addChild(conectPlot_last);
+
+          // 実験回数を表示
+          const messumEx = new PIXI.Text(sumEx);
+          messumEx.x = 25 + (15/plotsize)*(probTrans.length) + (5/plotsize);
+          messumEx.y = 610;
+          messumEx.style.fill = "white";
+          probTranslate.addChild(messumEx);
+
+          // 確率を表示
+          // 分母を表示
+          const Bunbo_trans = new PIXI.Text(sumEx);
+          Bunbo_trans.x = 45 + (15/plotsize)*(probTrans.length) + (5/plotsize);
+          Bunbo_trans.y = 580 - 415*probTrans[probTrans.length-1];
+          Bunbo_trans.style.fill = 0xff9999;
+          probTranslate.addChild(Bunbo_trans);
+
+          // 分子を表示
+          const Bunshi_trans = new PIXI.Text(sumPh);
+          Bunshi_trans.x = 45 + (15/plotsize)*(probTrans.length) + (5/plotsize);
+          Bunshi_trans.y = 550 - 415*probTrans[probTrans.length-1];
+          Bunshi_trans.style.fill = 0xff9999;
+          probTranslate.addChild(Bunshi_trans);
+
+          // 分数の線を表示
+          const Bunsuline_trans = new PIXI.Graphics();
+          Bunsuline_trans.lineStyle(2,0xff9999).moveTo(45 + (15/plotsize)*(probTrans.length) + (5/plotsize),580 - 415*probTrans[probTrans.length-1]).lineTo(70 + (15/plotsize)*(probTrans.length) + (5/plotsize),580 - 415*probTrans[probTrans.length-1]);
+          probTranslate.addChild(Bunsuline_trans);
+
+          // 小数で表示
+          const prob_trans = new PIXI.Text("(=" + Math.round((sumPh/sumEx)*100)/100 + ")"); // 小数点第2位で四捨五入
+          prob_trans.x = 86 + (15/plotsize)*(probTrans.length) + (5/plotsize);
+          prob_trans.y = 565 - 415*probTrans[probTrans.length-1];
+          prob_trans.style.fill = 0xff9999;
+          probTranslate.addChild(prob_trans);
+
+          // (0,0)と1点目を結ぶ線
           const conectPlot_first = new PIXI.Graphics();
-          conectPlot_first.lineStyle(3,0xff9999).moveTo(30 + 5,600 + 5).lineTo(30 + 15 + 5,600 - 415*probTrans[0] + 5);
+          conectPlot_first.lineStyle(3,0xff9999).moveTo(30 + (5/plotsize),600 + (5/plotsize)).lineTo(30 + (20/plotsize),600 - 415*probTrans[0] + (5/plotsize));
           probTranslate.addChild(conectPlot_first);
 
+          // 確率の推移のプロット
           for(i=0;i<probTrans.length;i++){ // 格納されている確率の個数分プロット
             const zahogime = new PIXI.Graphics();
-            zahogime.x = 30 + 15*(i+1);
+            zahogime.x = 30 + (15/plotsize)*(i+1);
             zahogime.y = 600 - 415*probTrans[i];
             zahogime.beginFill(0xff9999);
-            zahogime.drawRect(0,0,10,10);
+            zahogime.drawRect(0,0,(10/plotsize),(10/plotsize));
             zahogime.endFill();
             probTranslate.addChild(zahogime);
 
             const conectPlot = new PIXI.Graphics();
-            conectPlot.lineStyle(3,0xff9999).moveTo(30 + 15*i + 5,600 - 415*probTrans[i-1] + 5).lineTo(30 + 15*(i+1) + 5,600 - 415*probTrans[i] + 5);
+            conectPlot.lineStyle(2,0xff9999).moveTo(30 + (15/plotsize)*i + (5/plotsize),600 - 415*probTrans[i-1] + (5/plotsize)).lineTo(30 + (15/plotsize)*(i+1) + (5/plotsize),600 - 415*probTrans[i] + (5/plotsize));
             probTranslate.addChild(conectPlot);
           }
-
-
 
           // 実験に戻る(確率変遷を消す)
           function BackToExperiment(){
@@ -413,28 +459,28 @@
               case 0:
                 Wball += 1; // 白色が出た回数を+1
                 ballNo1.beginFill(0xffffff); // 白
-                ballNo1.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo1.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo1.endFill();
                 whichBoxNo1 = ballJudge(Wball); // この玉がL,Rのどちらの箱に入るべきかを判断
                 break;
               case 1:
                 Rball += 1; // 赤色が出た回数を+1
                 ballNo1.beginFill(0xff9999); // 赤
-                ballNo1.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo1.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo1.endFill();
                 whichBoxNo1 = ballJudge(Rball);
                 break;
               case 2:
                 Yball += 1; // 黄色が出た回数を+1
                 ballNo1.beginFill(0xffff00); // 黄
-                ballNo1.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo1.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo1.endFill();
                 whichBoxNo1 = ballJudge(Yball);
                 break;
               case 3:
                 Bball += 1; // 青色が出た回数を+1
                 ballNo1.beginFill(0x00bfff); // 青
-                ballNo1.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo1.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo1.endFill();
                 whichBoxNo1 = ballJudge(Bball);
                 break;
@@ -470,11 +516,11 @@
                 delDivBallMes(); // 分類しよう!の文字を非表示に
                 showDivBallMes2(); // まだ分類ができてないよ!を表示
                 if(whichBoxNo1 == 0){ // 箱Lに入るべきときは
-                  if(ballNo1.x > 90 & ballNo1.x < 310 & ballNo1.y > 440 & ballNo1.y < 610){ // 箱Lの位置にあるなら
+                  if(ballNo1.x > 90 & ballNo1.x < 310 & ballNo1.y > 390 & ballNo1.y < 470){ // 箱Lの位置にあるなら
                     delDivBallMes2(); // まだ分類できてないよ!を非表示
                   }
                 }else{ // 箱Rに入るべきときは
-                  if(ballNo1.x > 490 & ballNo1.x < 710 & ballNo1.y > 440 & ballNo1.y < 610){ // 箱Rの位置にあるなら
+                  if(ballNo1.x > 490 & ballNo1.x < 710 & ballNo1.y > 390 & ballNo1.y < 470){ // 箱Rの位置にあるなら
                     delDivBallMes2(); // まだ分類できてないよ!を非表示
                   }
                 }  
@@ -489,28 +535,28 @@
               case 0:
                 Wball += 1;
                 ballNo2.beginFill(0xffffff); // 白
-                ballNo2.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo2.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo2.endFill();
                 whichBoxNo2 = ballJudge(Wball);
                 break;
               case 1:
                 Rball += 1;
                 ballNo2.beginFill(0xff9999); // 赤
-                ballNo2.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo2.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo2.endFill();
                 whichBoxNo2 = ballJudge(Rball);
                 break;
               case 2:
                 Yball += 1;
                 ballNo2.beginFill(0xffff00); // 黄
-                ballNo2.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo2.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo2.endFill();
                 whichBoxNo2 = ballJudge(Yball);
                 break;
               case 3:
                 Bball += 1;
                 ballNo2.beginFill(0x00bfff); // 青
-                ballNo2.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo2.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo2.endFill();
                 whichBoxNo2 = ballJudge(Bball);
                 break;
@@ -538,11 +584,11 @@
                 delDivBallMes();
                 showDivBallMes2();
                 if(whichBoxNo2 == 0){
-                  if(ballNo2.x > 90 & ballNo2.x < 310 & ballNo2.y > 440 & ballNo2.y < 610){
+                  if(ballNo2.x > 90 & ballNo2.x < 310 & ballNo2.y > 390 & ballNo2.y < 470){
                     delDivBallMes2();
                   }
                 }else{
-                  if(ballNo2.x > 490 & ballNo2.x < 710 & ballNo2.y > 440 & ballNo2.y < 610){
+                  if(ballNo2.x > 490 & ballNo2.x < 710 & ballNo2.y > 390 & ballNo2.y < 470){
                     delDivBallMes2();
                   }
                 }  
@@ -556,28 +602,28 @@
               case 0:
                 Wball += 1;
                 ballNo3.beginFill(0xffffff); // 白
-                ballNo3.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo3.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo3.endFill();
                 whichBoxNo3 = ballJudge(Wball);
                 break;
               case 1:
                 Rball += 1;
                 ballNo3.beginFill(0xff9999); // 赤
-                ballNo3.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo3.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo3.endFill();
                 whichBoxNo3 = ballJudge(Rball);
                 break;
               case 2:
                 Yball += 1;
                 ballNo3.beginFill(0xffff00); // 黄
-                ballNo3.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo3.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo3.endFill();
                 whichBoxNo3 = ballJudge(Yball);
                 break;
               case 3:
                 Bball += 1;
                 ballNo3.beginFill(0x00bfff); // 青
-                ballNo3.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo3.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo3.endFill();
                 whichBoxNo3 = ballJudge(Bball);
                 break;
@@ -605,11 +651,11 @@
                 delDivBallMes();
                 showDivBallMes2();
                 if(whichBoxNo3 == 0){
-                  if(ballNo3.x > 90 & ballNo3.x < 310 & ballNo3.y > 440 & ballNo3.y < 610){
+                  if(ballNo3.x > 90 & ballNo3.x < 310 & ballNo3.y > 390 & ballNo3.y < 470){
                     delDivBallMes2();
                   }
                 }else{
-                  if(ballNo3.x > 490 & ballNo3.x < 710 & ballNo3.y > 440 & ballNo3.y < 610){
+                  if(ballNo3.x > 490 & ballNo3.x < 710 & ballNo3.y > 390 & ballNo3.y < 470){
                     delDivBallMes2();
                   }
                 }  
@@ -623,28 +669,28 @@
               case 0:
                 Wball += 1;
                 ballNo4.beginFill(0xffffff); // 白
-                ballNo4.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo4.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo4.endFill();
                 whichBoxNo4 = ballJudge(Wball);
                 break;
               case 1:
                 Rball += 1;
                 ballNo4.beginFill(0xff9999); // 赤
-                ballNo4.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo4.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo4.endFill();
                 whichBoxNo4 = ballJudge(Rball);
                 break;
               case 2:
                 Yball += 1;
                 ballNo4.beginFill(0xffff00); // 黄
-                ballNo4.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo4.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo4.endFill();
                 whichBoxNo4 = ballJudge(Yball);
                 break;
               case 3:
                 Bball += 1;
                 ballNo4.beginFill(0x00bfff); // 青
-                ballNo4.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo4.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo4.endFill();
                 whichBoxNo4 = ballJudge(Bball);
                 break;
@@ -672,11 +718,11 @@
                 delDivBallMes();
                 showDivBallMes2();
                 if(whichBoxNo4 == 0){
-                  if(ballNo4.x > 90 & ballNo4.x < 310 & ballNo4.y > 440 & ballNo4.y < 610){
+                  if(ballNo4.x > 90 & ballNo4.x < 310 & ballNo4.y > 390 & ballNo4.y < 470){
                     delDivBallMes2();
                   }
                 }else{
-                  if(ballNo4.x > 490 & ballNo4.x < 710 & ballNo4.y > 440 & ballNo4.y < 610){
+                  if(ballNo4.x > 490 & ballNo4.x < 710 & ballNo4.y > 390 & ballNo4.y < 470){
                     delDivBallMes2();
                   }
                 }  
@@ -690,28 +736,28 @@
               case 0:
                 Wball += 1;
                 ballNo5.beginFill(0xffffff); // 白
-                ballNo5.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo5.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo5.endFill();
                 whichBoxNo5 = ballJudge(Wball);
                 break;
               case 1:
                 Rball += 1;
                 ballNo5.beginFill(0xff9999); // 赤
-                ballNo5.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo5.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo5.endFill();
                 whichBoxNo5 = ballJudge(Rball);
                 break;
               case 2:
                 Yball += 1;
                 ballNo5.beginFill(0xffff00); // 黄
-                ballNo5.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo5.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo5.endFill();
                 whichBoxNo5 = ballJudge(Yball);
                 break;
               case 3:
                 Bball += 1;
                 ballNo5.beginFill(0x00bfff); // 青
-                ballNo5.drawCircle(0,0,40); // (中心x,中心y,半径)
+                ballNo5.drawCircle(0,0,ballrad); // (中心x,中心y,半径)
                 ballNo5.endFill();
                 whichBoxNo5 = ballJudge(Bball);
                 break;
@@ -739,11 +785,11 @@
                 delDivBallMes();
                 showDivBallMes2();
                 if(whichBoxNo5 == 0){
-                  if(ballNo5.x > 90 & ballNo5.x < 310 & ballNo5.y > 440 & ballNo5.y < 610){
+                  if(ballNo5.x > 90 & ballNo5.x < 310 & ballNo5.y > 390 & ballNo5.y < 470){
                     delDivBallMes2();
                   }
                 }else{
-                  if(ballNo5.x > 490 & ballNo5.x < 710 & ballNo5.y > 440 & ballNo5.y < 610){
+                  if(ballNo5.x > 490 & ballNo5.x < 710 & ballNo5.y > 390 & ballNo5.y < 470){
                     delDivBallMes2();
                   }
                 }  
@@ -757,7 +803,7 @@
         const machine = new PIXI.Graphics(); // グラフィックオブジェクトの作成
         //
         machine.x = 100;          // 横座標の設定
-        machine.y = 100;          // 縦座標の設定
+        machine.y = 100 - move_BoxAndPush;          // 縦座標の設定
         machine.beginFill(0xffffff);    // 指定の色で塗りつぶし開始準備
         machine.drawRect(0,0,400,250);  // 矩形を描写する
         machine.endFill();              // 塗りつぶしを完了する
@@ -770,7 +816,7 @@
           contaResult.removeChildren();
           const ballswitch = new PIXI.Graphics(); // グラフィックオブジェクトの作成
           ballswitch.x = 120;
-          ballswitch.y = 120;
+          ballswitch.y = 120 - move_BoxAndPush;
           ballswitch.beginFill(0x333333);
           ballswitch.drawRect(0,0,150,150);
           ballswitch.endFill();
@@ -792,6 +838,10 @@
           showProbability(sumEx,sumPh); // 確率を表示
           numberBoxL = 0; // 左の箱の玉の数を初期化
           numberBoxR = 0; // 
+          
+          if(sumEx<4){
+            showProb(); // 3回目の実験までは理論値と比較を表示
+          }
         }
 
         // スイッチを消して結果を反映ボタンを表示する関数
@@ -800,7 +850,7 @@
           const showResult = new PIXI.Graphics(); // グラフィックオブジェクトの作成
           //
           showResult.x = 120;
-          showResult.y = 120;
+          showResult.y = 120 - move_BoxAndPush;
           showResult.beginFill(0x333333);
           showResult.drawRect(0,0,150,150);
           showResult.endFill();
@@ -863,7 +913,7 @@
         const ballswitch = new PIXI.Graphics(); // グラフィックオブジェクトの作成
         //
         ballswitch.x = 120;
-        ballswitch.y = 120;
+        ballswitch.y = 120 - move_BoxAndPush;
         ballswitch.beginFill(0x333333);
         ballswitch.drawRect(0,0,150,150);
         ballswitch.endFill();
@@ -875,7 +925,7 @@
         const ballexit = new PIXI.Graphics(); // グラフィックオブジェクトの作成
         //
         ballexit.x = 320;
-        ballexit.y = 270;
+        ballexit.y = 270 - move_BoxAndPush;
         ballexit.beginFill(0x333333);
         ballexit.drawRect(0,0,160,80);
         ballexit.endFill();
@@ -911,6 +961,15 @@
         meresBaFirst.y = restBall.y;
         meresBaFirst.style.fill = "red";
         app.stage.addChild(meresBaFirst);
+
+        // 分類のルール
+        //const experiment_rulePic = new PIXI.Sprite.from('experiment_rule.png');
+        const experiment_rulePic = new PIXI.Sprite.from('experiment_rule_new.png');
+        experiment_rulePic.x = 5;          // 横座標の設定
+        experiment_rulePic.y = 600;          // 縦座標の設定
+        experiment_rulePic.width = 790;
+        experiment_rulePic.height = 100;
+        app.stage.addChild(experiment_rulePic);
 
         // containerの作成(ボール専用)
         const container = new PIXI.Container();
@@ -948,3 +1007,38 @@
         const contaSwitch = new PIXI.Container();
         app.stage.addChild(contaSwitch);
 
+        // containerの作成(操作)
+        const howPlay = new PIXI.Container();
+        app.stage.addChild(howPlay);
+
+        function howPlay_easy(){ // オープン画面説明
+          const instGreenCover = new PIXI.Graphics();
+          instGreenCover.x = mesPh.x;
+          instGreenCover.y = mesPh.y;
+          instGreenCover.beginFill(0x556b2f);
+          instGreenCover.drawRect(0,0,800-mesPh.x,300);
+          howPlay.addChild(instGreenCover);
+
+          const instPic1 = new PIXI.Sprite.from('ex_inst1_new.png');
+          instPic1.x = 150;          // 横座標の設定
+          instPic1.y = 80 - move_BoxAndPush;          // 縦座標の設定
+          instPic1.width = 140;
+          instPic1.height = 90;
+          howPlay.addChild(instPic1);
+  
+          const instPic2 = new PIXI.Sprite.from('ex_inst2_new.png');
+          instPic2.x = 420;          // 横座標の設定
+          instPic2.y = 280 - move_BoxAndPush;          // 縦座標の設定
+          instPic2.width = 300;
+          instPic2.height = 80;
+          howPlay.addChild(instPic2);
+
+          const instPic3 = new PIXI.Sprite.from('ex_inst3_new.png');
+          instPic3.x = 100;          // 横座標の設定
+          instPic3.y = 550 - move_BoxAndPush;          // 縦座標の設定
+          instPic3.width = 415;
+          instPic3.height = 100;
+          howPlay.addChild(instPic3);
+        }
+        
+      howPlay_easy();
