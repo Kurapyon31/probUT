@@ -3,15 +3,23 @@
   }
   
 .goRule{
-    float: left;
     margin: -3px 5px;
+    width: 176px;
   }
   
 .goMath{
+    float: left;
     margin: -3px 5px;
+    width: 176px;
   }
   
 .goTheo{
     float: left;
     margin: -3px 5px;
+    width: 176px;
   }
+
+.goHome{
+  float: left;
+  width: 96px;
+}
