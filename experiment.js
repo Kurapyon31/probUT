@@ -20,6 +20,9 @@
 
         let whichBox = 0; // 0ならば箱L
         const ballrad = 40; // ボールの半径
+        
+        let shortLec = -1; // 最初の「操作」のレクチャー
+        let shortLec_b = -1; // 最初の「結果を反映」のレクチャー
 
         const move_BoxAndPush = 50; // 機械と箱の初期位置をどれだけ上にずらすか(アレンジ用)
 
@@ -157,7 +160,6 @@
         
         // 残り玉数を表示
         function showrestBall(sumSw,e){
-          
           const resBacover = new PIXI.Graphics(); // その前の数字を塗りつぶし
           resBacover.x = restBall.x + 75;
           resBacover.y = restBall.y;
@@ -330,7 +332,6 @@
         ////////////////////////////////
         // 理論値と比較を押したときに起こる関数
         function showProb(){
-
           // containerの作成(確率変遷専用)
           const probTranslate = new PIXI.Container();
           app.stage.addChild(probTranslate);
@@ -440,7 +441,6 @@
             conectPlot.lineStyle(2,0xff9999).moveTo(30 + (15/plotsize)*i + (5/plotsize),600 - 415*probTrans[i-1] + (5/plotsize)).lineTo(30 + (15/plotsize)*(i+1) + (5/plotsize),600 - 415*probTrans[i] + (5/plotsize));
             probTranslate.addChild(conectPlot);
           }
-
           // 実験に戻る(確率変遷を消す)
           function BackToExperiment(){
             probTranslate.removeChildren();
@@ -449,8 +449,73 @@
 
         //////////////////////////////
 
+        // shortLectureを表示
+        function howPlay_easy(){
+          if(shortLec==-1){
+            const instGreenCover = new PIXI.Graphics();
+            instGreenCover.x = mesPh.x;
+            instGreenCover.y = mesPh.y;
+            instGreenCover.beginFill(0x556b2f);
+            instGreenCover.drawRect(0,0,800-mesPh.x,300);
+            howPlay.addChild(instGreenCover);
+
+            const instPic1 = new PIXI.Sprite.from('ex_inst1_new.png');
+            instPic1.x = 150;          // 横座標の設定
+            instPic1.y = 220 - move_BoxAndPush;          // 縦座標の設定
+            instPic1.width = 140;
+            instPic1.height = 90;
+            howPlay.addChild(instPic1);
+    
+            const instPic2 = new PIXI.Sprite.from('ex_inst2_new.png');
+            instPic2.x = 420;          // 横座標の設定
+            instPic2.y = 280 - move_BoxAndPush;          // 縦座標の設定
+            instPic2.width = 300;
+            instPic2.height = 80;
+            howPlay.addChild(instPic2);
+
+            const instPic3 = new PIXI.Sprite.from('ex_inst3_new.png');
+            instPic3.x = 75;          // 横座標の設定
+            instPic3.y = 550 - move_BoxAndPush;          // 縦座標の設定
+            instPic3.width = 415;
+            instPic3.height = 100;
+            howPlay.addChild(instPic3);
+
+            const instPic4 = new PIXI.Sprite.from('ex_inst4_new.png');
+            instPic4.x = 500;          // 横座標の設定
+            instPic4.y = 510 - move_BoxAndPush;          // 縦座標の設定
+            instPic4.width = 260;
+            instPic4.height = 120;
+            howPlay.addChild(instPic4);
+
+            const instPic5 = new PIXI.Sprite.from('ex_inst5_new.png');
+            instPic5.x = 500;          // 横座標の設定
+            instPic5.y = 10;          // 縦座標の設定
+            instPic5.width = 300;
+            instPic5.height = 180;
+            howPlay.addChild(instPic5);
+          }else{
+            howPlay.removeChildren();
+          }
+        }
+
+        // [結果を反映]のshortLectureを表示
+        function howPlay_easy_b(){
+          if(shortLec_b==-1){
+            const instPic6 = new PIXI.Sprite.from('ex_inst6_new.png');
+            instPic6.x = 100;          // 横座標の設定
+            instPic6.y = 245 - move_BoxAndPush;          // 縦座標の設定
+            instPic6.width = 230;
+            instPic6.height = 140;
+            howPlay_b.addChild(instPic6);
+          }else{
+            howPlay_b.removeChildren();
+          }
+        }
+
         // 玉を追加する関数
         function addBall(){
+          shortLec = 0; // -1でないとshortlectureは表示されない
+          howPlay_easy(); // shortlecture非表示に
           if(sumSw == 0){
             showDivBallMes(); // 分類しよう!を表示
             let ballNo1 = new PIXI.Graphics(); // ボールを一つ作成
@@ -528,6 +593,7 @@
             }
           // 以下2個目～5個目のボールに対して全く同じ実装を書いている
           }else if(sumSw == 1){
+            howPlay_easy(); ////////////////////////////////////////////✧
             showDivBallMes();
             let ballNo2 = new PIXI.Graphics();
             let color = Math.floor(Math.random() * 4); // 0, 1, 2, 3の乱数
@@ -729,6 +795,7 @@
               }
             }
           }else if(sumSw == 4){
+            howPlay_easy_b(); // [結果を反映]のレクチャーを表示
             showDivBallMes();
             let ballNo5 = new PIXI.Graphics();
             let color = Math.floor(Math.random() * 4); // 0, 1, 2, 3の乱数
@@ -813,6 +880,8 @@
         // 反映ボタンからスイッチへ表示を変更する関数
         // 結果を反映ボタンを押したときを記述する関数
         function showBallSwitch(){
+          shortLec_b = 0; // 次からは表示されないように
+          howPlay_easy_b();
           contaResult.removeChildren();
           const ballswitch = new PIXI.Graphics(); // グラフィックオブジェクトの作成
           ballswitch.x = 120;
@@ -1007,38 +1076,12 @@
         const contaSwitch = new PIXI.Container();
         app.stage.addChild(contaSwitch);
 
-        // containerの作成(操作)
+        // containerの作成(操作a)
         const howPlay = new PIXI.Container();
         app.stage.addChild(howPlay);
-
-        function howPlay_easy(){ // オープン画面説明
-          const instGreenCover = new PIXI.Graphics();
-          instGreenCover.x = mesPh.x;
-          instGreenCover.y = mesPh.y;
-          instGreenCover.beginFill(0x556b2f);
-          instGreenCover.drawRect(0,0,800-mesPh.x,300);
-          howPlay.addChild(instGreenCover);
-
-          const instPic1 = new PIXI.Sprite.from('ex_inst1_new.png');
-          instPic1.x = 150;          // 横座標の設定
-          instPic1.y = 220 - move_BoxAndPush;          // 縦座標の設定
-          instPic1.width = 140;
-          instPic1.height = 90;
-          howPlay.addChild(instPic1);
-  
-          const instPic2 = new PIXI.Sprite.from('ex_inst2_new.png');
-          instPic2.x = 420;          // 横座標の設定
-          instPic2.y = 280 - move_BoxAndPush;          // 縦座標の設定
-          instPic2.width = 300;
-          instPic2.height = 80;
-          howPlay.addChild(instPic2);
-
-          const instPic3 = new PIXI.Sprite.from('ex_inst3_new.png');
-          instPic3.x = 100;          // 横座標の設定
-          instPic3.y = 550 - move_BoxAndPush;          // 縦座標の設定
-          instPic3.width = 415;
-          instPic3.height = 100;
-          howPlay.addChild(instPic3);
-        }
         
-      howPlay_easy();
+        howPlay_easy(); // shortLectureを表示
+
+        // containerの作成(操作b)
+        const howPlay_b = new PIXI.Container();
+        app.stage.addChild(howPlay_b);
