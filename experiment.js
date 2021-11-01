@@ -1021,7 +1021,7 @@
 
           const instPic1 = new PIXI.Sprite.from('ex_inst1_new.png');
           instPic1.x = 150;          // 横座標の設定
-          instPic1.y = 80 - move_BoxAndPush;          // 縦座標の設定
+          instPic1.y = 220 - move_BoxAndPush;          // 縦座標の設定
           instPic1.width = 140;
           instPic1.height = 90;
           howPlay.addChild(instPic1);
