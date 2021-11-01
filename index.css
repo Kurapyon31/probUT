@@ -1,12 +1,16 @@
+body{
+    background-color: #C9AD7D;
+}
+
 .open_Background{
     width: 100%;
 }
 
 .open_goUT{
     float: left;
-    width: 45%;
+    width: 49%;
 }
 
 .open_goBirth{
-    width: 45%;
+    width: 49%;
 }
