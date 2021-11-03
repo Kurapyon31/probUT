@@ -23,6 +23,7 @@
         
         let shortLec = -1; // 最初の「操作」のレクチャー
         let shortLec_b = -1; // 最初の「結果を反映」のレクチャー
+        let shortLec_c = -1; // 最初の「グラフの見方」のレクチャー
 
         const move_BoxAndPush = 50; // 機械と箱の初期位置をどれだけ上にずらすか(アレンジ用)
 
@@ -441,10 +442,24 @@
             conectPlot.lineStyle(2,0xff9999).moveTo(30 + (15/plotsize)*i + (5/plotsize),600 - 415*probTrans[i-1] + (5/plotsize)).lineTo(30 + (15/plotsize)*(i+1) + (5/plotsize),600 - 415*probTrans[i] + (5/plotsize));
             probTranslate.addChild(conectPlot);
           }
+
+          // [グラフ]のshortLectureを表示
+          if(sumEx<2){ // 最初の一回だけ
+            const instPic7 = new PIXI.Sprite.from('ex_inst7_new.png');
+            instPic7.x = 200;          // 横座標の設定
+            instPic7.y = 200;          // 縦座標の設定
+            instPic7.width = 510;
+            instPic7.height = 250;
+            probTranslate.addChild(instPic7);
+          }
+
           // 実験に戻る(確率変遷を消す)
           function BackToExperiment(){
             probTranslate.removeChildren();
           }
+          
+          howPlay_easy_d(); // [以降はグラフは手動]を表示
+
         }
 
         //////////////////////////////
@@ -512,10 +527,25 @@
           }
         }
 
+        // [これ以降はグラフは手動表示]を表示
+        function howPlay_easy_d(){
+          if(sumSw==0 & sumEx==3){
+            const instPic8 = new PIXI.Sprite.from('ex_inst8_new.png');
+            instPic8.x = 50;          // 横座標の設定
+            instPic8.y = 250;          // 縦座標の設定
+            instPic8.width = 690;
+            instPic8.height = 230;
+            howPlay.addChild(instPic8);
+          }else{
+            howPlay.removeChildren();
+          }
+        }
+
         // 玉を追加する関数
         function addBall(){
           shortLec = 0; // -1でないとshortlectureは表示されない
           howPlay_easy(); // shortlecture非表示に
+
           if(sumSw == 0){
             showDivBallMes(); // 分類しよう!を表示
             let ballNo1 = new PIXI.Graphics(); // ボールを一つ作成
@@ -593,7 +623,7 @@
             }
           // 以下2個目～5個目のボールに対して全く同じ実装を書いている
           }else if(sumSw == 1){
-            howPlay_easy(); ////////////////////////////////////////////✧
+            //howPlay_easy(); ////////////////////////////////////////////✧
             showDivBallMes();
             let ballNo2 = new PIXI.Graphics();
             let color = Math.floor(Math.random() * 4); // 0, 1, 2, 3の乱数
@@ -882,6 +912,7 @@
         function showBallSwitch(){
           shortLec_b = 0; // 次からは表示されないように
           howPlay_easy_b();
+
           contaResult.removeChildren();
           const ballswitch = new PIXI.Graphics(); // グラフィックオブジェクトの作成
           ballswitch.x = 120;
@@ -1085,3 +1116,5 @@
         // containerの作成(操作b)
         const howPlay_b = new PIXI.Container();
         app.stage.addChild(howPlay_b);
+
+        
