@@ -90,3 +90,9 @@ ul{
 .choicebutton5{
   width: 49%;
 }
+
+.footer{
+  width: 100%;
+  text-align: center;
+  margin: 5% 0;
+}
