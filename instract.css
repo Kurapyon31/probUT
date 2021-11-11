@@ -104,3 +104,19 @@ ul{
   text-align: center;
   margin: 5% 0;
 }
+
+.footer a:link{
+  color: #333;
+}
+
+.footer a:visited{
+  color: #333;
+}
+
+.footer a:hover{
+  color: skyblue;
+}
+
+.footer a:active{
+  color: pink
+}
