@@ -23,4 +23,26 @@ body{
 .footer a:active{
     color: pink
   }
+
+.backEx{
+    width: 100%;
+    text-align: center;
+    margin: 5% 0;
+  }
+
+.backEx a:link{
+    color: white;
+  }
+
+.backEx a:visited{
+    color: white;
+  }
+
+.backEx a:hover{
+    color: skyblue;
+  }
+
+.backEx a:active{
+    color: pink
+  }
   
