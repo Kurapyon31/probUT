@@ -2,15 +2,38 @@ body{
     background-color: #C9AD7D;
 }
 
-.open_Background{
+@media all and (orientation: landscape){
+    div.forPortrait{display: none;}
+}
+
+@media all and (orientation: portrait){
+    div.forLandscape{display: none;}
+}
+
+.OPEN_16_9_upper{
+    float: left;
     width: 100%;
 }
 
-.open_goUT{
+.OPEN_16_9_lower_left{
     float: left;
     width: 50%;
 }
 
-.open_goBirth{
+.OPEN_16_9_lower_right{
+    width: 50%;
+}
+
+.OPEN_9_16_upper{
+    float: left;
+    width: 100%;
+}
+
+.OPEN_9_16_lower_left{
+    float: left;
+    width: 50%;
+}
+
+.OPEN_9_16_lower_right{
     width: 50%;
 }
