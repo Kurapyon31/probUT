@@ -7,6 +7,7 @@ function window_load(){
 
 // windowの読み込み
 window_width = window_load();
+alert(window_width);
 
 // 倍率の計算
 ScaleMag = window_width/800;
