@@ -2,6 +2,61 @@
     margin: 0px 0px -5px 0px;
   }
   
+.experiment_title{
+  width: 100%;
+}
+
+.selectMode{
+  text-align: center;
+  margin: auto;
+}
+
+.selectMode .goRule{
+  float: left;
+  margin: -3px 3px;
+  width: 25%;
+}
+
+.selectMode .goMath{
+  float: left;
+  margin: -3px 3px;
+  width: 25%;
+}
+
+.selectMode .goTheo{
+  float: left;
+  margin: -3px 3px;
+  width: 25%;
+}
+
+.selectMode .allWhite{
+  float: left;
+  width: 10%;
+}
+
+.header{
+  width: 100%;
+  text-align: left;
+  margin: 1% 0;
+}
+
+.header a:link{
+  color: #333;
+}
+
+.header a:visited{
+  color: #333;
+}
+
+.header a:hover{
+  color: skyblue;
+}
+
+.header a:active{
+  color: pink
+}
+
+/* 元のCSS
 .goRule{
     margin: -3px 5px;
     width: 176px;
@@ -23,3 +78,4 @@
   float: left;
   width: 96px;
 }
+*/
