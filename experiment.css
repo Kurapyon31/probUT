@@ -1,6 +1,7 @@
-.experimentRule{
+
+/*.experiment{
     margin: 0px 0px -5px 0px;
-  }
+  }*/
   
 .experiment_title{
   width: 100%;
@@ -8,24 +9,23 @@
 
 .selectMode{
   text-align: center;
-  margin: auto;
 }
 
 .selectMode .goRule{
   float: left;
-  margin: -3px 3px;
+  margin: -1% 0% 1% 1%;
   width: 25%;
 }
 
 .selectMode .goMath{
   float: left;
-  margin: -3px 3px;
+  margin: -1% 0% 1% 1%;
   width: 25%;
 }
 
 .selectMode .goTheo{
   float: left;
-  margin: -3px 3px;
+  margin: -1% 0% 1% 1%;
   width: 25%;
 }
 
@@ -54,6 +54,11 @@
 
 .header a:active{
   color: pink
+}
+
+.experiment_Rule_new{
+  margin-top: -1%;
+  width: 100%;
 }
 
 /* 元のCSS
