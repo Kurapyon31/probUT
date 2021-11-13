@@ -569,6 +569,7 @@ function showBallSwitch(){
   howPlay_easy_b();
 
   // ボタンを表示
+  /*
   contaResult.removeChildren();
   const ballswitch = new PIXI.Graphics(); // グラフィックオブジェクトの作成
   ballswitch.x = 60*ScaleMag;
@@ -588,6 +589,17 @@ function showBallSwitch(){
   Push.height *= 0.5*ScaleMag;
   Push.style.fill = "white";
   contaSwitch.addChild(Push);
+  */
+
+  // ボタンとPushを表示
+  const ballswitch = new PIXI.Sprite.from('experiment_push.png');
+  ballswitch.x = 60*ScaleMag;          // 横座標の設定
+  ballswitch.y = 35*ScaleMag;          // 縦座標の設定
+  ballswitch.width = 75*ScaleMag;
+  ballswitch.height = 75*ScaleMag;
+  contaSwitch.addChild(ballswitch);
+  ballswitch.interactive = true;
+  ballswitch.on("pointertap", addBall); // クリックしたら玉が表れる
 
   showrestBall(0); // 残り玉数を「5個」に戻す
   container.removeChildren(); // 5個の玉を消す
@@ -607,6 +619,7 @@ function showBallSwitch(){
 function showResultButtun(){
   contaSwitch.removeChildren();
 
+  /*
 　// グラフィックオブジェクトの作成
   const showResult = new PIXI.Graphics();
   showResult.x = 60*ScaleMag;
@@ -635,6 +648,17 @@ function showResultButtun(){
   reflectResult2.height *= 0.5*ScaleMag;
   reflectResult2.style.fill = "white";
   contaResult.addChild(reflectResult2);
+  */
+
+  // [結果を反映]ボタンを表示
+  const showResult = new PIXI.Sprite.from('experiment_ref.png');
+  showResult.x = 60*ScaleMag;
+  showResult.y = 35*ScaleMag;
+  showResult.width = 75*ScaleMag;
+  showResult.height = 75*ScaleMag;
+  contaResult.addChild(showResult);
+  showResult.interactive = true;
+  showResult.on("pointertap", showBallSwitch); // クリックしたら再度Pushボタンが表示
 }
 
 // 実測値を表示するための関数
@@ -674,7 +698,18 @@ function showProbability(sumEx,sumPh){
 
 // スイッチ初期表示
 function setSwitch(){
-    // 機械本体
+    // ボタンとPushを表示
+  　const ballswitch = new PIXI.Sprite.from('experiment_push.png');
+  　ballswitch.x = 60*ScaleMag;          // 横座標の設定
+  　ballswitch.y = 35*ScaleMag;          // 縦座標の設定
+  　ballswitch.width = 75*ScaleMag;
+  　ballswitch.height = 75*ScaleMag;
+  　app.stage.addChild(ballswitch);
+  　ballswitch.interactive = true;
+  　ballswitch.on("pointertap", addBall); // クリックしたら玉が表れる
+
+  　/*
+    // スイッチ背景
     const ballswitch = new PIXI.Graphics(); // グラフィックオブジェクトの作成
     ballswitch.x = 60*ScaleMag;
     ballswitch.y = 35*ScaleMag;
@@ -684,6 +719,16 @@ function setSwitch(){
     app.stage.addChild(ballswitch);
     ballswitch.interactive = true;
     ballswitch.on("pointertap", addBall); // クリックしたら玉が表れる
+
+    // 文字(push)を表示
+    const Push = new PIXI.Text("Push");
+    Push.x = 82.5*ScaleMag;
+    Push.y = 65*ScaleMag;
+    Push.width *= 0.5*ScaleMag;
+    Push.height *= 0.5*ScaleMag;
+    Push.style.fill = "white";
+    app.stage.addChild(Push);
+    */
 
     // ボール取り出し口1
     const ballexit = new PIXI.Graphics(); // グラフィックオブジェクトの作成
@@ -700,15 +745,6 @@ function setSwitch(){
     ballexit2.drawCircle(200*ScaleMag,ballexit.y,(ballexit.width/2)); // (中心x,中心y,半径)
     ballexit2.endFill();
     app.stage.addChild(ballexit2);
-
-    // 文字(push)を表示
-    const Push = new PIXI.Text("Push");
-    Push.x = 82.5*ScaleMag;
-    Push.y = 65*ScaleMag;
-    Push.width *= 0.5*ScaleMag;
-    Push.height *= 0.5*ScaleMag;
-    Push.style.fill = "white";
-    app.stage.addChild(Push);
 
     // 残り玉数を表示
     const restBall = new PIXI.Text("残り　   　球");
