@@ -540,12 +540,23 @@ function howPlay_easy(){
 // [結果を反映]のshortLectureを表示
 function howPlay_easy_b(){
     if(shortLec_b==-1){
+      /*
       const instPic6 = new PIXI.Sprite.from('ex_inst6_new.png');
       instPic6.x = 50*ScaleMag;          // 横座標の設定
       instPic6.y = 97.5*ScaleMag;          // 縦座標の設定
       instPic6.width = 115*ScaleMag;
       instPic6.height = 70*ScaleMag;
       howPlay_b.addChild(instPic6);
+      */
+
+      const instPic6 = new PIXI.Sprite.from('ex_inst_monkey3.png');
+      instPic6.x = 0;          // 横座標の設定
+      instPic6.y = 100*ScaleMag;          // 縦座標の設定
+      instPic6.width = window_width;
+      instPic6.height = 165*ScaleMag;
+      howPlay_b.addChild(instPic6);
+      instPic6.alpha = 0.9;
+
     }else{
       howPlay_b.removeChildren();
     }
