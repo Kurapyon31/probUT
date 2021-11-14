@@ -479,6 +479,7 @@ function showProb(){
 // shortLectureを表示
 function howPlay_easy(){
     if(shortLec==-1){
+      /*
       const instGreenCover = new PIXI.Graphics();
       instGreenCover.x = mesPh.x;
       instGreenCover.y = mesPh.y;
@@ -520,6 +521,17 @@ function howPlay_easy(){
       instPic5.width = 150*ScaleMag;
       instPic5.height = 90*ScaleMag;
       howPlay.addChild(instPic5);
+      */
+
+      // サルによるinstraction
+      const instPic_monkey = new PIXI.Sprite.from('ex_inst_monkey.png');
+      instPic_monkey.x = 0;          // 横座標の設定
+      instPic_monkey.y = 100*ScaleMag;          // 縦座標の設定
+      instPic_monkey.width = window_width;
+      instPic_monkey.height = 190*ScaleMag;
+      howPlay.addChild(instPic_monkey);
+      instPic_monkey.alpha = 0.9;
+
     }else{
       howPlay.removeChildren();
     }
