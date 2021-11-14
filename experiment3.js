@@ -554,12 +554,23 @@ function howPlay_easy_b(){
 // [これ以降はグラフは手動表示]を表示
 function howPlay_easy_d(){
     if(sumSw==0 & sumEx==3){
+      /*
       const instPic8 = new PIXI.Sprite.from('ex_inst8_new.png');
       instPic8.x = 25*ScaleMag;          // 横座標の設定
       instPic8.y = 125*ScaleMag;          // 縦座標の設定
       instPic8.width = 345*ScaleMag;
       instPic8.height = 115*ScaleMag;
       howPlay.addChild(instPic8);
+      */
+
+      const instPic8 = new PIXI.Sprite.from('ex_inst_monkey2.png');
+      instPic8.x = 0;          // 横座標の設定
+      instPic8.y = 100*ScaleMag;          // 縦座標の設定
+      instPic8.width = window_width;
+      instPic8.height = 175*ScaleMag;
+      howPlay.addChild(instPic8);
+      instPic8.alpha = 0.9;
+
     }else{
       howPlay.removeChildren();
     }
