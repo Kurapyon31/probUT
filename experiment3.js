@@ -26,6 +26,7 @@ let whichBox = 0; // 0ならば箱L
 let shortLec = -1; // 最初の「操作」のレクチャー
 let shortLec_b = -1; // 最初の「結果を反映」のレクチャー
 let shortLec_c = -1; // 最初の「グラフの見方」のレクチャー
+let shortLec_d = -1; // 最初の「グラフ手動表示」のレクチャー
 
 // 初期値(画面サイズによる)
 const ballrad = 20*ScaleMag; // ボールの半径
@@ -469,12 +470,12 @@ function showProb(){
       */
 
       const instPic7 = new PIXI.Sprite.from('ex_inst_monkey4.png');
-      instPic7.x = 90*ScaleMag;
+      instPic7.x = 80*ScaleMag;
       instPic7.y = 70*ScaleMag;
-      instPic7.width = 305*ScaleMag;
-      instPic7.height = 145*ScaleMag;
+      instPic7.width = 310*ScaleMag;
+      instPic7.height = 149*ScaleMag;
       probTranslate.addChild(instPic7);
-      instPic7.alpha = 0.7;
+      instPic7.alpha = 0.75;
 
     }
 
@@ -543,8 +544,25 @@ function howPlay_easy(){
       howPlay.addChild(instPic_monkey);
       instPic_monkey.alpha = 0.9;
 
+      // サルによるinstractionを消すための「×」
+      const instPic_monkey_del = new PIXI.Sprite.from('ex_inst_del.png');
+      instPic_monkey_del.x = 0;          // 横座標の設定
+      instPic_monkey_del.y = 105*ScaleMag;          // 縦座標の設定
+      instPic_monkey_del.width = 40*ScaleMag;
+      instPic_monkey_del.height = 40*ScaleMag;
+      howPlay.addChild(instPic_monkey_del);
+      instPic_monkey_del.alpha = 0.9;
+      instPic_monkey_del.interactive = true;
+      instPic_monkey_del.buttonMode = true; // カーソルを重ねると矢印が手の形に変わる
+      instPic_monkey_del.on("pointertap", howPlay_easy_del); // クリックしたら玉が表れる 
+
     }else{
       howPlay.removeChildren();
+    }
+
+    function howPlay_easy_del(){
+      shortLec = 0; // -1でないとshortlectureは表示されない
+      howPlay_easy(); // shortlecture非表示にする
     }
 }
 
@@ -568,14 +586,31 @@ function howPlay_easy_b(){
       howPlay_b.addChild(instPic6);
       instPic6.alpha = 0.9;
 
+      // サルによるinstractionを消すための「×」
+      const instPic6_del = new PIXI.Sprite.from('ex_inst_del.png');
+      instPic6_del.x = 0;          // 横座標の設定
+      instPic6_del.y = 105*ScaleMag;          // 縦座標の設定
+      instPic6_del.width = 40*ScaleMag;
+      instPic6_del.height = 40*ScaleMag;
+      howPlay_b.addChild(instPic6_del);
+      instPic6_del.alpha = 0.9;
+      instPic6_del.interactive = true;
+      instPic6_del.buttonMode = true; // カーソルを重ねると矢印が手の形に変わる
+      instPic6_del.on("pointertap", howPlay_easy_b_del); // クリックしたら玉が表れる
+
     }else{
       howPlay_b.removeChildren();
+    }
+
+    function howPlay_easy_b_del(){
+      shortLec_b = 0; // -1でないとshortlectureは表示されない
+      howPlay_easy_b(); // shortlecture非表示にする
     }
 }
 
 // [これ以降はグラフは手動表示]を表示
 function howPlay_easy_d(){
-    if(sumSw==0 & sumEx==3){
+    if(sumSw==0 & sumEx==3 & shortLec_d==-1){
       /*
       const instPic8 = new PIXI.Sprite.from('ex_inst8_new.png');
       instPic8.x = 25*ScaleMag;          // 横座標の設定
@@ -593,8 +628,25 @@ function howPlay_easy_d(){
       howPlay.addChild(instPic8);
       instPic8.alpha = 0.9;
 
+      // サルによるinstractionを消すための「×」
+      const instPic8_del = new PIXI.Sprite.from('ex_inst_del.png');
+      instPic8_del.x = 0;          // 横座標の設定
+      instPic8_del.y = 105*ScaleMag;          // 縦座標の設定
+      instPic8_del.width = 40*ScaleMag;
+      instPic8_del.height = 40*ScaleMag;
+      howPlay.addChild(instPic8_del);
+      instPic8_del.alpha = 0.9;
+      instPic8_del.interactive = true;
+      instPic8_del.buttonMode = true; // カーソルを重ねると矢印が手の形に変わる
+      instPic8_del.on("pointertap", howPlay_easy_d_del); // クリックしたら玉が表れる
+
     }else{
       howPlay.removeChildren();
+    }
+
+    function howPlay_easy_d_del(){
+      shortLec_d = 0; // -1でないとshortlectureは表示されない
+      howPlay_easy_d(); // shortlecture非表示にする
     }
 }
 
