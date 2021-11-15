@@ -343,6 +343,10 @@ function showProb(){
     const probTranslate = new PIXI.Container();
     app.stage.addChild(probTranslate);
 
+    // containerの作成(サルinstract用)
+    const probTranslate2 = new PIXI.Container();
+    app.stage.addChild(probTranslate2);
+
     // 背景
     const probTransBack = new PIXI.Graphics();
     probTransBack.x = 0;          // 横座標の設定
@@ -469,6 +473,7 @@ function showProb(){
       probTranslate.addChild(instPic7);
       */
 
+      /*
       const instPic7 = new PIXI.Sprite.from('ex_inst_monkey4.png');
       instPic7.x = 80*ScaleMag;
       instPic7.y = 70*ScaleMag;
@@ -476,14 +481,42 @@ function showProb(){
       instPic7.height = 149*ScaleMag;
       probTranslate.addChild(instPic7);
       instPic7.alpha = 0.75;
+      */
+
+      const instPic7 = new PIXI.Sprite.from('ex_inst_monkey5.png');
+      instPic7.x = 0;
+      instPic7.y = 100*ScaleMag;
+      instPic7.width = window_width;
+      instPic7.height = 200*ScaleMag;
+      probTranslate2.addChild(instPic7);
+      instPic7.alpha = 0.85;
+
+      // サルによるinstractionを消すための「×」
+      const instPic7_del = new PIXI.Sprite.from('ex_inst_del.png');
+      instPic7_del.x = 0;          // 横座標の設定
+      instPic7_del.y = 105*ScaleMag;          // 縦座標の設定
+      instPic7_del.width = 40*ScaleMag;
+      instPic7_del.height = 40*ScaleMag;
+      probTranslate2.addChild(instPic7_del);
+      instPic7_del.alpha = 0.9;
+      instPic7_del.interactive = true;
+      instPic7_del.buttonMode = true; // カーソルを重ねると矢印が手の形に変わる
+      instPic7_del.on("pointertap", showProb_del); // クリックしたら玉が表れる
+
 
     }
 
     // 実験に戻る(確率変遷を消す)
     function BackToExperiment(){
       probTranslate.removeChildren();
+      probTranslate2.removeChildren();
     }
     
+    // サルのインストラクトだけ消す
+    function showProb_del(){
+      probTranslate2.removeChildren();
+    }
+
     // [以降はグラフは手動]を表示
     howPlay_easy_d();
 }
