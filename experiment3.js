@@ -696,6 +696,7 @@ function showBallSwitch(){
   ballswitch.height = 75*ScaleMag;
   contaSwitch.addChild(ballswitch);
   ballswitch.interactive = true;
+  ballswitch.buttonMode = true; // カーソルを重ねると矢印が手の形に変わる
   ballswitch.on("pointertap", addBall); // クリックしたら玉が表れる
 
   showrestBall(0); // 残り玉数を「5個」に戻す
@@ -755,6 +756,7 @@ function showResultButtun(){
   showResult.height = 75*ScaleMag;
   contaResult.addChild(showResult);
   showResult.interactive = true;
+  showResult.buttonMode = true; // カーソルを重ねると矢印が手の形に変わる
   showResult.on("pointertap", showBallSwitch); // クリックしたら再度Pushボタンが表示
 }
 
@@ -803,6 +805,7 @@ function setSwitch(){
   　ballswitch.height = 75*ScaleMag;
   　app.stage.addChild(ballswitch);
   　ballswitch.interactive = true;
+    ballswitch.buttonMode = true; // カーソルを重ねると矢印が手の形に変わる
   　ballswitch.on("pointertap", addBall); // クリックしたら玉が表れる
 
   　/*
