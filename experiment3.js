@@ -528,7 +528,7 @@ function howPlay_easy(){
       instPic_monkey.x = 0;          // 横座標の設定
       instPic_monkey.y = 100*ScaleMag;          // 縦座標の設定
       instPic_monkey.width = window_width;
-      instPic_monkey.height = 190*ScaleMag;
+      instPic_monkey.height = 200*ScaleMag;
       howPlay.addChild(instPic_monkey);
       instPic_monkey.alpha = 0.9;
 
@@ -549,11 +549,11 @@ function howPlay_easy_b(){
       howPlay_b.addChild(instPic6);
       */
 
-      const instPic6 = new PIXI.Sprite.from('ex_inst_monkey3.png');
+      const instPic6 = new PIXI.Sprite.from('ex_inst_monkey2.png');
       instPic6.x = 0;          // 横座標の設定
       instPic6.y = 100*ScaleMag;          // 縦座標の設定
       instPic6.width = window_width;
-      instPic6.height = 165*ScaleMag;
+      instPic6.height = 200*ScaleMag;
       howPlay_b.addChild(instPic6);
       instPic6.alpha = 0.9;
 
@@ -574,11 +574,11 @@ function howPlay_easy_d(){
       howPlay.addChild(instPic8);
       */
 
-      const instPic8 = new PIXI.Sprite.from('ex_inst_monkey2.png');
+      const instPic8 = new PIXI.Sprite.from('ex_inst_monkey3.png');
       instPic8.x = 0;          // 横座標の設定
       instPic8.y = 100*ScaleMag;          // 縦座標の設定
       instPic8.width = window_width;
-      instPic8.height = 175*ScaleMag;
+      instPic8.height = 200*ScaleMag;
       howPlay.addChild(instPic8);
       instPic8.alpha = 0.9;
 
