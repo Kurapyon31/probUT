@@ -459,12 +459,23 @@ function showProb(){
 
     // [グラフ]のshortLectureを表示
     if(sumEx<2){ // 最初の一回だけ
+      /*
       const instPic7 = new PIXI.Sprite.from('ex_inst7_new.png');
       instPic7.x = 100*ScaleMag;
       instPic7.y = 100*ScaleMag;
       instPic7.width = 255*ScaleMag;
       instPic7.height = 125*ScaleMag;
       probTranslate.addChild(instPic7);
+      */
+
+      const instPic7 = new PIXI.Sprite.from('ex_inst_monkey4.png');
+      instPic7.x = 90*ScaleMag;
+      instPic7.y = 70*ScaleMag;
+      instPic7.width = 305*ScaleMag;
+      instPic7.height = 145*ScaleMag;
+      probTranslate.addChild(instPic7);
+      instPic7.alpha = 0.7;
+
     }
 
     // 実験に戻る(確率変遷を消す)
