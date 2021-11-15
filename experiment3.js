@@ -376,7 +376,8 @@ function showProb(){
     probTranslate.addChild(testTitle);
 
     // グラフ軸
-    const graphBack = new PIXI.Sprite.from('probGraph_2.png');
+    //const graphBack = new PIXI.Sprite.from('probGraph_2.png');
+    const graphBack = new PIXI.Sprite.from('probGraph_3.png');
     graphBack.x = 0;
     graphBack.y = 65*ScaleMag;
     graphBack.width = window_width;
