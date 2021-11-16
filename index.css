@@ -1,5 +1,6 @@
 body{
     background-color: #C9AD7D;
+    text-align: center;
 }
 
 @media all and (orientation: landscape){
@@ -37,3 +38,23 @@ body{
 .OPEN_9_16_lower_right{
     width: 50%;
 }
+
+.OPEN_QR{
+    margin-top: -30%;
+    width: 30%;
+}
+
+/* 初期の表示
+.open_Background{
+    width: 100%;
+}
+
+.open_goUT{
+    float: left;
+    width: 50%;
+}
+
+.open_goBirth{
+    width: 50%;
+}
+*/
