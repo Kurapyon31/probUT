@@ -3,6 +3,10 @@
     margin: 0px 0px -5px 0px;
   }*/
   
+#app canvas {
+  width: 100%;
+}
+
 .experiment_title{
   width: 100%;
 }
