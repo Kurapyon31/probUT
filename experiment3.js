@@ -33,7 +33,8 @@ const ballrad = 20*ScaleMag; // ボールの半径
 
 // pixi.jsのアプリケーションを作成
 const app = new PIXI.Application({
-  width: window_width,
+  // width: window_width,
+  width: document.getElementById('app').clientWidth,
   height: 340*ScaleMag,
   backgroundColor: 0x556b2f, // 背景色
   //追加//////////////////////////////////////////
