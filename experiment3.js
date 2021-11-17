@@ -42,7 +42,7 @@ const app = new PIXI.Application({
   //追加//////////////////////////////////////////
 });
 // stageに追加
-document.body.appendChild(app.view);
+document.getElementById('app').appendChild(app.view);
 
 // 文字(Lに4色入った回数:)を表示
 const mesPh = new PIXI.Text("Lに4色入った回数:");
