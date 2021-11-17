@@ -573,6 +573,7 @@ function howPlay_easy(){
       const instPic_monkey = new PIXI.Sprite.from('ex_inst_monkey.png');
       instPic_monkey.x = 0;          // 横座標の設定
       instPic_monkey.y = 100*ScaleMag;          // 縦座標の設定
+      console.log(window_width); // 一時的に追加★★★★
       instPic_monkey.width = window_width;
       instPic_monkey.height = 200*ScaleMag;
       howPlay.addChild(instPic_monkey);
