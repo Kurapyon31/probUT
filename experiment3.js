@@ -36,6 +36,10 @@ const app = new PIXI.Application({
   width: window_width,
   height: 340*ScaleMag,
   backgroundColor: 0x556b2f, // 背景色
+  //追加//////////////////////////////////////////
+  resolution: window.devicePixelRatio || 1,
+  autoResize: true
+  //追加//////////////////////////////////////////
 });
 // stageに追加
 document.body.appendChild(app.view);
