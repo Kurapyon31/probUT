@@ -10,11 +10,6 @@
     */
 }
 
-#app canvas {
-  width: 100%;
-  max-width: 800px;
-}
-
 /* 横長 */
 @media all and (orientation: landscape){
   body{
@@ -47,6 +42,10 @@
   .selectMode .goTheo{
     margin-left: 31%;
   }
+
+  #app canvas {
+    width: 50%;
+  }
 }
 
 /* 縦長 */
@@ -75,6 +74,10 @@
   
   .selectMode .goTheo{
     margin-left: 11%;
+  }
+
+  #app canvas {
+    width: 100%;
   }
 }
 
