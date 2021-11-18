@@ -2,10 +2,10 @@
 /*.experiment{
     margin: 0px 0px -5px 0px;
   }*/
-  
+
 #app {
-  text-align: center;
-  background-color: #556B2F;
+    text-align: center;
+    background-color: #556B2F;
 }
 
 #app canvas {
@@ -13,26 +13,69 @@
   max-width: 800px;
 }
 
-.experiment_title{
-  width: 100%;
+/* 横長 */
+@media all and (orientation: landscape){
+  body{
+    text-align: center;
+  }
+  
+  .experiment_title{
+    width: 50%;
+  }
+  
+  .experiment_Rule_new{
+    margin-top: -1%;
+    margin-bottom: -0.5%;
+    width: 50%;
+  }
+
+  .selectMode{
+    text-align: center;
+    height: auto;
+    overflow: auto;
+    padding: 1%;
+  }
+  
+  .selectMode img{
+    float: left;
+    width: 12%;
+    margin: -1% 0% -0.5% 1%;
+  }
+  
+  .selectMode .goTheo{
+    margin-left: 31%;
+  }
 }
 
-.selectMode{
-  text-align: center;
-  height: auto;
-  overflow: auto;
-  padding: 1%;
+/* 縦長 */
+@media all and (orientation: portrait){
+  .experiment_title{
+    width: 100%;
+  }
+  
+  .experiment_Rule_new{
+    margin-top: -1%;
+    width: 100%;
+  }
+
+  .selectMode{
+    text-align: center;
+    height: auto;
+    overflow: auto;
+    padding: 1%;
+  }
+  
+  .selectMode img{
+    float: left;
+    width: 25%;
+    margin: -1% 0% 1% 1%;
+  }
+  
+  .selectMode .goTheo{
+    margin-left: 11%;
+  }
 }
 
-.selectMode img{
-  float: left;
-  width: 25%;
-  margin: -1% 0% 1% 1%;
-}
-
-.selectMode .goTheo{
-  margin-left: 11%;
-}
 
 .header{
   width: 100%;
@@ -54,11 +97,6 @@
 
 .header a:active{
   color: pink
-}
-
-.experiment_Rule_new{
-  margin-top: -1%;
-  width: 100%;
 }
 
 /* 元のCSS
